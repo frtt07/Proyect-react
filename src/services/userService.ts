@@ -1,12 +1,13 @@
 import axios from "axios";
 import { User } from "../models/User";
+import api from "../interceptors/axiosInterceptor";
 
 const API_URL = import.meta.env.VITE_API_URL + "/users" || "";
 
 class UserService {
     async getUsers(): Promise<User[]> {
         try {
-            const response = await axios.get<User[]>(API_URL);
+            const response = await api.get("/users");
             return response.data;
         } catch (error) {
             console.error("Error al obtener usuarios:", error);

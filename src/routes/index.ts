@@ -1,4 +1,8 @@
 import { lazy } from 'react';
+import ListUsers from '../pages/Users/List';
+import ListRoles from '../pages/Roles/List';
+import CreateUser from '../pages/Users/Create';
+import UpdateUser from '../pages/Users/Update';
 
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
@@ -16,6 +20,26 @@ const coreRoutes = [
     path: '/demo',
     title: 'Demo',
     component: Demo,
+  },
+  {
+    path: '/users/create',
+    title: 'Create Users',
+    component: CreateUser,
+  },
+  {
+    path: '/users/update/:id',
+    title: 'Update Users',
+    component: UpdateUser,
+  },
+  {
+    path: '/users/list',
+    title: 'List Users',
+    component: ListUsers,
+  },
+  {
+    path: '/roles/list',
+    title: 'List Roles',
+    component: ListRoles,
   },
   {
     path: '/calendar',

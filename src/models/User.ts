@@ -1,3 +1,4 @@
+import { session } from "./Sessions";   
 export interface User {
     id?: number;
     name?: string;
@@ -8,4 +9,5 @@ export interface User {
     phone?: string;
     is_active?: boolean;
     token?:string;
+    sessions?: session[];
 }
