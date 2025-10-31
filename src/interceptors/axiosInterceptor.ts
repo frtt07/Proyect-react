@@ -38,7 +38,7 @@ api.interceptors.response.use(
     (error) => {
         if (error.response?.status === 401) {
             console.log("No autorizado, redirigiendo a login...");
-            window.location.href = "/login"; // Redirigir si la sesión expira
+            // window.location.href = "/login"; // Redirigir si la sesión expira
         }
         return Promise.reject(error);
     }
