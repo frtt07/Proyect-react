@@ -1,4 +1,4 @@
-import { session } from "./Sessions";   
+import { Address } from "./Address";
 export interface User {
     id?: number;
     name?: string;
@@ -9,5 +9,5 @@ export interface User {
     phone?: string;
     is_active?: boolean;
     token?:string;
-    sessions?: session[];
+    address?: Address;
 }
