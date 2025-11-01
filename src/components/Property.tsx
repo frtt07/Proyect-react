@@ -21,7 +21,6 @@ const PropertyComponent: React.FC<PropertyProps> = ({name,color,price,rent }) =>
                 </ul>
             </div>
         </div>
-
     </div>;
 };
 

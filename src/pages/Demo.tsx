@@ -9,11 +9,27 @@ const Demo: React.FC = () => {
         };
     }, []);
 
-    //Este es el TS
-    //Nombre como variable reactiva
-    let [name, setName] = useState("Felipe"); //useState me permite manipular la variable desde el HTML
+    //Aqui se programa en type script
 
-    let edad: number = 10;
+    let [name, setName] = useState("Felipe"); //useState me permite manipular la variable desde el HTML
+    let fabian: string = "Hola me llamo fabian";
+    let [reactName, setReactName] = useState("Fabitox"); // Variable reactiva
+
+    //Funcion para manejar los cambios de la variable reactiva
+    const cambioReact = (evento: any) => {
+        setReactName(evento.target.value);
+    }
+
+    const clickButton = () => {
+        console.log(`Esto es un log para ${reactName}`);
+    }
+
+    let [edad, setEdad] = useState(0);
+
+    const manejarEdad = (event:any) => {
+        setEdad(event.target.value);
+    }
+
     let activo: boolean = true;
     let poderes: string[] = ["volar", "fuerza", "velocidad"];
 
@@ -28,7 +44,30 @@ const Demo: React.FC = () => {
     //Este es HTML
     return <div>
         <p>Hola mundo {name}</p>
+        
+        <p>{fabian}</p>
+        <p>Esto es una variable reactiva: {reactName}</p>
+        <label htmlFor="reactName">Variable reactiva: </label>
+        <input
+            id="reactName"
+            type="text"
+            value={reactName}
+            onChange={cambioReact}
+        />
+        <button onClick={clickButton}>
+            Console log
+        </button>
+        <p>
+            {["a", "e", "i", "o", "u"].includes(reactName?.[0]?.toLowerCase())
+                ? "Es vocal"
+                : "No es vocal"}
+        </p>
         <p>Edad: {edad}</p>
+        <input 
+        type="number" 
+        value={edad}
+        onChange={manejarEdad}
+        />
         <p>{edad >= 18 ? "Mayor de edad" : "Menor de edad"}</p>
         <p>Poderes</p>
         <ul>
