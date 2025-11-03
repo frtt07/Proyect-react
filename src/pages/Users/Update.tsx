@@ -37,7 +37,7 @@ const UpdateUser: React.FC = () => {
                     icon: "success",
                     timer: 3000
                 });
-                navigate("/users/list"); // Redirección en React Router
+                navigate("/users"); // Redirección en React Router
             } else {
                 Swal.fire({
                     title: "Error",
