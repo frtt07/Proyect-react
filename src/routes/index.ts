@@ -4,6 +4,7 @@ import ListRoles from '../pages/Roles/List';
 import CreateUser from '../pages/Users/Create';
 import UpdateUser from '../pages/Users/Update';
 import Usuarios from '../pages/Usuarios';
+import createProfiles from '../pages/Profiles/Create';
 
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
@@ -21,6 +22,11 @@ const coreRoutes = [
     path: '/demo',
     title: 'Demo',
     component: Demo,
+  },
+  {
+    path: '/profiles/create',
+    title: 'Create Profiles',
+    component: createProfiles,
   },
   {
     path: '/usuarios',

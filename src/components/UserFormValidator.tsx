@@ -13,7 +13,7 @@ interface MyFormProps {
 
 
 
-const UserFormValidator: React.FC<MyFormProps> = ({ mode, handleCreate, handleUpdate,user }) => {
+const UserFormValidator: React.FC<MyFormProps> = ({ mode, handleCreate, handleUpdate, user }) => {
     const handleSubmit = (formattedValues: User) => {
         if (mode === 1 && handleCreate) {
             handleCreate(formattedValues);  // Si `handleCreate` está definido, lo llamamos

@@ -9,7 +9,7 @@ const isAuthenticated = () => {
 // Componente de Ruta Protegida
 const ProtectedRoute = () => {
     // return isAuthenticated() ? <Outlet /> : <Navigate to="/auth/signin" replace />;
-    return !isAuthenticated() ? <Outlet /> : <Navigate to="/auth/signin" replace />;
+    return isAuthenticated() ? <Outlet /> : <Navigate to="/auth/signin" replace />;
 };
 
 export default ProtectedRoute;

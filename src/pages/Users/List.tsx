@@ -67,6 +67,9 @@ const ListUsers: React.FC = () => {
                 ]}
                 onAction={handleAction}
             />
+            <a href="http://localhost:5173/users/create">
+            <button className="btn btn-primary">Crear usuario</button>
+            </a>
         </div>
     );
 };
