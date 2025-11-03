@@ -3,8 +3,11 @@ import ListUsers from '../pages/Users/List';
 import ListRoles from '../pages/Roles/List';
 import CreateUser from '../pages/Users/Create';
 import UpdateUser from '../pages/Users/Update';
+<<<<<<< HEAD
 import Usuarios from '../pages/Usuarios';
 import createProfiles from '../pages/Profiles/Create';
+=======
+>>>>>>> 8ef2211a8b8928b5cc884f211638f60c21417c03
 
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
@@ -15,7 +18,13 @@ const Settings = lazy(() => import('../pages/Settings'));
 const Tables = lazy(() => import('../pages/Tables'));
 const Alerts = lazy(() => import('../pages/UiElements/Alerts'));
 const Buttons = lazy(() => import('../pages/UiElements/Buttons'));
-const Demo= lazy(() => import('../pages/Demo'));
+const Demo = lazy(() => import('../pages/Demo'));
+const DigitalSignatureList = lazy(
+  () => import('../pages/DigitalSignature/DigSigList'),
+);
+const DigitalSignatureForm = lazy(
+  () => import('../pages/DigitalSignature/DigSigForm'),
+);
 
 const coreRoutes = [
   {
@@ -24,6 +33,7 @@ const coreRoutes = [
     component: Demo,
   },
   {
+<<<<<<< HEAD
     path: '/profiles/create',
     title: 'Create Profiles',
     component: createProfiles,
@@ -32,20 +42,35 @@ const coreRoutes = [
     path: '/usuarios',
     title: 'Listado de Usuarios',
     component: Usuarios,
+=======
+    path: '/digital-signature/:userId',
+    title: 'Digital Signature',
+    component: DigitalSignatureList,
+>>>>>>> 8ef2211a8b8928b5cc884f211638f60c21417c03
   },
   {
-    path: '/users/create',
-    title: 'Create Users',
-    component: CreateUser,
+    path: '/digital-signature/:userId/crear',
+    title: 'Create Digital Signature',
+    component: DigitalSignatureForm,
   },
   {
-    path: '/users/update/:id',
+    path: '/digital-signature/:userId/editar/:id',
+    title: 'Update Digital Signature',
+    component: DigitalSignatureForm,
+  },
+  {
+    path: '/users/editar/:id',
     title: 'Update Users',
     component: UpdateUser,
   },
   {
-    path: '/users/list',
-    title: 'List Users',
+    path: '/users/crear',
+    title: 'Create Users',
+    component: CreateUser,
+  },
+  {
+    path: '/users',
+    title: 'Users List',
     component: ListUsers,
   },
   {

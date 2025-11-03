@@ -26,7 +26,7 @@ const CreateUser: React.FC = () => {
                     timer: 3000
                 })
                 console.log("Usuario creado con éxito:", createdUser);
-                navigate("/users/list");
+                navigate("/users");
             } else {
                 Swal.fire({
                     title: "Error",

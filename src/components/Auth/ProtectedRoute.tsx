@@ -12,4 +12,6 @@ const ProtectedRoute = () => {
     return isAuthenticated() ? <Outlet /> : <Navigate to="/auth/signin" replace />;
 };
 
+console.log(isAuthenticated());
+
 export default ProtectedRoute;

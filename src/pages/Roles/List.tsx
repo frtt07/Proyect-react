@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import GenericTable from "../../components/GenericTable";
+import GenericTable from "../../components/Generics/GenericList";
 import { Role } from "../../models/Role";
 
 
