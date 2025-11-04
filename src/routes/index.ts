@@ -3,11 +3,8 @@ import ListUsers from '../pages/Users/List';
 import ListRoles from '../pages/Roles/List';
 import CreateUser from '../pages/Users/Create';
 import UpdateUser from '../pages/Users/Update';
-<<<<<<< HEAD
-import Usuarios from '../pages/Usuarios';
 import createProfiles from '../pages/Profiles/Create';
-=======
->>>>>>> 8ef2211a8b8928b5cc884f211638f60c21417c03
+
 
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
@@ -33,20 +30,19 @@ const coreRoutes = [
     component: Demo,
   },
   {
-<<<<<<< HEAD
     path: '/profiles/create',
     title: 'Create Profiles',
     component: createProfiles,
   },
+  // {
+  //   path: '/profiles/list',
+  //   title: 'Profiles List',
+  //   component: ProfileList,
+  // },
   {
-    path: '/usuarios',
-    title: 'Listado de Usuarios',
-    component: Usuarios,
-=======
     path: '/digital-signature/:userId',
     title: 'Digital Signature',
     component: DigitalSignatureList,
->>>>>>> 8ef2211a8b8928b5cc884f211638f60c21417c03
   },
   {
     path: '/digital-signature/:userId/crear',

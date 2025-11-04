@@ -26,28 +26,59 @@ const CreateProfile: React.FC = () => {
 
     const handleCreateProfile = async (profile: Profile) => {
         try {
-            const createdProfile = await profileService.createProfile(profile);
+            // ✅ Si hay una foto, usamos FormData
+            const formData = new FormData();
+            formData.append("id", profile.id.toString());
+            formData.append("phone", profile.phone);
+            if (profile.photoURL instanceof File) {
+                formData.append("photoURL", profile.photoURL);
+            }
+
+            // 🔹 Crear perfil en el backend
+            const createdProfile = await profileService.createProfile(formData);
+
             if (createdProfile) {
+                // ✅ Buscar el usuario correspondiente
+                const userToUpdate = users.find((u) => u.id === createdProfile.id);
+
+                if (userToUpdate) {
+                    // ✅ Asignar el perfil recién creado al usuario
+                    const updatedUser: User = {
+                        ...userToUpdate,
+                        profile: createdProfile,
+                    };
+
+                    // ✅ Actualizar usuario en el backend
+                    await userService.updateUser(updatedUser.id!, updatedUser);
+                }
+
+                // 🔄 Refrescamos usuarios para reflejar el cambio
+                await fetchUsers();
+
                 Swal.fire({
                     title: "Completado",
                     text: "Se ha creado correctamente el perfil",
                     icon: "success",
-                    timer: 3000,
+                    timer: 2500,
+                    showConfirmButton: false,
                 });
             } else {
                 Swal.fire({
                     title: "Error",
                     text: "Hubo un problema al crear el perfil",
                     icon: "error",
-                    timer: 3000,
+                    timer: 2500,
+                    showConfirmButton: false,
                 });
             }
         } catch (error) {
+            console.error("Error creando perfil:", error);
             Swal.fire({
                 title: "Error",
                 text: "No se pudo conectar con el servidor",
                 icon: "error",
-                timer: 3000,
+                timer: 2500,
+                showConfirmButton: false,
             });
         }
     };
@@ -62,7 +93,7 @@ const CreateProfile: React.FC = () => {
                 initialValues={{
                     id: "",
                     phone: "",
-                    photoURL: "",
+                    photoURL: null,
                 }}
                 validationSchema={Yup.object({
                     id: Yup.number()
@@ -74,16 +105,17 @@ const CreateProfile: React.FC = () => {
                     photoURL: Yup.mixed().nullable(),
                 })}
                 onSubmit={(values, { resetForm }) => {
-                    const formattedValues: Profile = {
-                        id: Number(values.id),
+                    const formattedProfile: Profile = {
+                        id: Number(values.id), // ✅ id del perfil = id del usuario
                         phone: values.phone,
                         photoURL: values.photoURL,
                     };
-                    handleCreateProfile(formattedValues);
+                    console.log("📤 Enviando perfil:", formattedProfile);
+                    handleCreateProfile(formattedProfile);
                     resetForm();
                 }}
             >
-                {({ setFieldValue }) => (
+                {({ setFieldValue, values }) => (
                     <Form className="space-y-5">
                         {/* 🔹 Selector de Usuario */}
                         <div>
@@ -93,9 +125,15 @@ const CreateProfile: React.FC = () => {
                             >
                                 Usuario
                             </label>
-                            <Field
-                                as="select"
+
+                            <select
+                                id="id"
                                 name="id"
+                                value={values.id}
+                                onChange={(e) => {
+                                    const selected = e.target.value;
+                                    setFieldValue("id", selected);
+                                }}
                                 className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             >
                                 <option value="">Seleccione un usuario</option>
@@ -104,7 +142,8 @@ const CreateProfile: React.FC = () => {
                                         {user.name} ({user.email})
                                     </option>
                                 ))}
-                            </Field>
+                            </select>
+
                             <ErrorMessage
                                 name="id"
                                 component="p"
@@ -133,7 +172,7 @@ const CreateProfile: React.FC = () => {
                             />
                         </div>
 
-                        {/* 🔹 Campo de Foto (archivo real) */}
+                        {/* 🔹 Campo Foto */}
                         <div>
                             <label
                                 htmlFor="photoURL"
@@ -147,8 +186,8 @@ const CreateProfile: React.FC = () => {
                                 type="file"
                                 accept="image/*"
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                    const file = event.currentTarget.files?.[0];
-                                    setFieldValue("photoURL", file || "");
+                                    const file = event.currentTarget.files?.[0] || null;
+                                    setFieldValue("photoURL", file);
                                 }}
                                 className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             />
@@ -159,7 +198,7 @@ const CreateProfile: React.FC = () => {
                             />
                         </div>
 
-                        {/* 🔹 Botón Crear Perfil */}
+                        {/* 🔹 Botón */}
                         <div className="text-center mt-6">
                             <button
                                 type="submit"
