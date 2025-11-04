@@ -1,10 +1,7 @@
 import { lazy } from 'react';
 import ListUsers from '../pages/Users/List';
-import ListRoles from '../pages/Roles/List';
 import CreateUser from '../pages/Users/Create';
 import UpdateUser from '../pages/Users/Update';
-import createProfiles from '../pages/Profiles/Create';
-
 
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
@@ -16,12 +13,18 @@ const Tables = lazy(() => import('../pages/Tables'));
 const Alerts = lazy(() => import('../pages/UiElements/Alerts'));
 const Buttons = lazy(() => import('../pages/UiElements/Buttons'));
 const Demo = lazy(() => import('../pages/Demo'));
-const DigitalSignatureList = lazy(
-  () => import('../pages/DigitalSignature/DigSigList'),
-);
-const DigitalSignatureForm = lazy(
-  () => import('../pages/DigitalSignature/DigSigForm'),
-);
+const DigitalSignatureList = lazy(() => import('../pages/DigitalSignature/DigSigList'));
+const DigitalSignatureForm = lazy(() => import('../pages/DigitalSignature/DigSigForm'));
+
+const ListRoles = lazy(() => import('../pages/Roles/List'));
+const CreateRole = lazy(() => import('../pages/Roles/Create'));
+const UpdateRole = lazy(() => import('../pages/Roles/Update'));
+const UserRolesList = lazy(() => import('../pages/UserRoles/List'));
+const AssignRole = lazy(() => import('../pages/UserRoles/AssignRole'));
+const UserPasswordsList = lazy(() => import('../pages/Passwords/List'));
+const ListAddresses = lazy(() => import('../pages/Addresses/List'));
+const CreateAddress = lazy(() => import('../pages/Addresses/Create'));
+const UpdateAddress = lazy(() => import('../pages/Addresses/Update'));
 
 const coreRoutes = [
   {
@@ -29,31 +32,53 @@ const coreRoutes = [
     title: 'Demo',
     component: Demo,
   },
+  // Tus rutas de gestión de seguridad
   {
-    path: '/profiles/create',
-    title: 'Create Profiles',
-    component: createProfiles,
-  },
-  // {
-  //   path: '/profiles/list',
-  //   title: 'Profiles List',
-  //   component: ProfileList,
-  // },
-  {
-    path: '/digital-signature/:userId',
-    title: 'Digital Signature',
-    component: DigitalSignatureList,
+    path: '/roles',
+    title: 'Roles List',
+    component: ListRoles,
   },
   {
-    path: '/digital-signature/:userId/crear',
-    title: 'Create Digital Signature',
-    component: DigitalSignatureForm,
+    path: '/roles/crear',
+    title: 'Create Role',
+    component: CreateRole,
   },
   {
-    path: '/digital-signature/:userId/editar/:id',
-    title: 'Update Digital Signature',
-    component: DigitalSignatureForm,
+    path: '/roles/editar/:id',
+    title: 'Update Role',
+    component: UpdateRole,
   },
+  {
+    path: '/user-roles/:userId',
+    title: 'User Roles',
+    component: UserRolesList,
+  },
+  {
+    path: '/user-roles/:userId/asignar',
+    title: 'Assign Role',
+    component: AssignRole,
+  },
+  {
+    path: '/passwords/:userId',
+    title: 'User Passwords',
+    component: UserPasswordsList,
+  },
+  {
+    path: '/addresses',
+    title: 'Addresses List',
+    component: ListAddresses,
+  },
+  {
+    path: '/addresses/crear',
+    title: 'Create Address',
+    component: CreateAddress,
+  },
+  {
+    path: '/addresses/editar/:id',
+    title: 'Update Address',
+    component: UpdateAddress,
+  },
+  // Rutas existentes
   {
     path: '/users/editar/:id',
     title: 'Update Users',
@@ -68,11 +93,6 @@ const coreRoutes = [
     path: '/users',
     title: 'Users List',
     component: ListUsers,
-  },
-  {
-    path: '/roles/list',
-    title: 'List Roles',
-    component: ListRoles,
   },
   {
     path: '/calendar',
@@ -118,6 +138,21 @@ const coreRoutes = [
     path: '/ui/buttons',
     title: 'Buttons',
     component: Buttons,
+  },
+  {
+    path: '/digital-signature/:userId',
+    title: 'Digital Signature',
+    component: DigitalSignatureList,
+  },
+  {
+    path: '/digital-signature/:userId/crear',
+    title: 'Create Digital Signature',
+    component: DigitalSignatureForm,
+  },
+  {
+    path: '/digital-signature/:userId/editar/:id',
+    title: 'Update Digital Signature',
+    component: DigitalSignatureForm,
   },
 ];
 

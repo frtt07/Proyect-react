@@ -1,15 +1,17 @@
 import { Address } from "./Address";
 import { Profile } from "./Profile";
+
 export interface User {
-    id?: number;
+    id?: number | string;
     name?: string;
     email?: string;
-    password?:string;
+    password?: string;
     age?: number;
     phone?: string;
     city?: string;
     is_active?: boolean;
-    token?:string;
+    token?: string;
     address?: Address;
     profile?: Profile;
+    picture?: string; // Nuevo campo para foto de Google
 }
