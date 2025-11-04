@@ -9,15 +9,21 @@ import {
   Box,
   Switch,
   FormControlLabel,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 
+// Define el tipo correcto para FormField
 interface FormField {
   name: string;
   label: string;
-  type?: "text" | "email" | "password" | "number" | "date" | "boolean";
+  type?: "text" | "email" | "password" | "number" | "date" | "boolean" | "select";
   required?: boolean;
   multiline?: boolean;
   rows?: number;
+  options?: { value: any; label: string }[];
 }
 
 interface GenericFormProps {
@@ -39,8 +45,8 @@ const GenericForm: React.FC<GenericFormProps> = ({
 }) => {
   const [values, setValues] = React.useState(initialValues);
 
-  const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+  const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement | { value: unknown }>) => {
+    const value = event.target.type === 'checkbox' ? (event.target as HTMLInputElement).checked : event.target.value;
     setValues({ ...values, [field]: value });
   };
 
@@ -62,6 +68,25 @@ const GenericForm: React.FC<GenericFormProps> = ({
           }
           label={field.label}
         />
+      );
+    }
+
+    if (field.type === "select" && field.options) {
+      return (
+        <FormControl fullWidth variant="outlined">
+          <InputLabel>{field.label}</InputLabel>
+          <Select
+            value={values[field.name] || ''}
+            onChange={handleChange(field.name)}
+            label={field.label}
+          >
+            {field.options.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       );
     }
 

@@ -39,7 +39,10 @@ const ListRoles: React.FC = () => {
     setSnackbar({ open: true, message, severity });
   };
 
-  const handleAction = async (action: string, role: Role) => {
+  const handleAction = async (action: string, item: Record<string, any>) => {
+    // Convertir el item a Role
+    const role = item as Role;
+    
     if (action === "edit") {
       navigate(`/roles/editar/${role.id}`);
     } else if (action === "delete") {

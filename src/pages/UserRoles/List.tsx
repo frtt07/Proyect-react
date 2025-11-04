@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -8,32 +7,70 @@ import {
   Snackbar,
   Card,
   CardContent,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Chip,
 } from "@mui/material";
-import GenericTable from "../../components/Generics/MUI/GenericList";
-import { UserRole } from "../../models/UserRole";
 import { userRoleService } from "../../services/userRoleService";
+import { userService } from "../../services/userService";
+import { UserRole } from "../../models/UserRole";
 import Swal from "sweetalert2";
 
+interface UserWithRoles {
+  id: number;
+  name: string;
+  email: string;
+  roles: UserRole[];
+}
+
 const UserRolesList: React.FC = () => {
-  const { userId } = useParams<{ userId: string }>();
-  const [userRoles, setUserRoles] = useState<UserRole[]>([]);
+  const [usersWithRoles, setUsersWithRoles] = useState<UserWithRoles[]>([]);
   const [loading, setLoading] = useState(true);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" as any });
 
   useEffect(() => {
-    if (userId) {
-      fetchUserRoles(parseInt(userId));
-    }
-  }, [userId]);
+    fetchAllUsersWithRoles();
+  }, []);
 
-  const fetchUserRoles = async (userId: number) => {
+  const fetchAllUsersWithRoles = async () => {
     try {
       setLoading(true);
-      const roles = await userRoleService.getUserRolesWithDetails(userId);
-      setUserRoles(roles);
+      
+      const users = await userService.getUsers();
+      const usersWithRolesData: UserWithRoles[] = [];
+      
+      for (const user of users) {
+        try {
+          // USAR EL MÉTODO CORREGIDO que incluye nombres de roles
+          const userRoles = await userRoleService.getUserRolesWithDetails(user.id);
+          
+          usersWithRolesData.push({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            roles: userRoles
+          });
+        } catch (error) {
+          console.error(`Error cargando roles para usuario ${user.id}:`, error);
+          usersWithRolesData.push({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            roles: []
+          });
+        }
+      }
+      
+      setUsersWithRoles(usersWithRolesData);
     } catch (error) {
-      console.error("Error cargando roles:", error);
-      showSnackbar("Error al cargar roles del usuario", "error");
+      console.error("Error cargando usuarios:", error);
+      showSnackbar("Error al cargar la lista de usuarios", "error");
     } finally {
       setLoading(false);
     }
@@ -43,80 +80,156 @@ const UserRolesList: React.FC = () => {
     setSnackbar({ open: true, message, severity });
   };
 
-  const handleAction = async (action: string, item: Record<string, any>) => {
-    // Convertir el item a UserRole
-    const userRole = item as UserRole;
-    
-    if (action === "remove" && userRole.id && userId) {
-      Swal.fire({
-        title: "¿Estás seguro?",
-        text: "El usuario perderá este rol",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Sí, remover",
-        cancelButtonText: "Cancelar",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            // Usar el método correcto - necesita userId y roleId
-            const success = await userRoleService.removeRoleFromUser(
-              parseInt(userId), 
-              userRole.roleId
-            );
-            if (success) {
-              showSnackbar("Rol removido correctamente", "success");
-              fetchUserRoles(parseInt(userId));
-            } else {
-              showSnackbar("Error al remover el rol", "error");
-            }
-          } catch (error) {
-            console.error("Error removiendo rol:", error);
+  const handleRemoveRole = async (userId: number, roleId: number) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "El usuario perderá este rol",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, remover",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const success = await userRoleService.removeRoleFromUser(userId, roleId);
+          if (success) {
+            showSnackbar("Rol removido correctamente", "success");
+            fetchAllUsersWithRoles();
+          } else {
             showSnackbar("Error al remover el rol", "error");
           }
+        } catch (error) {
+          console.error("Error removiendo rol:", error);
+          showSnackbar("Error al remover el rol", "error");
         }
-      });
+      }
+    });
+  };
+
+  // FUNCIÓN CORREGIDA: Obtener nombre del rol desde userRole
+  const getRoleName = (userRole: UserRole) => {
+    // Si tiene información del role, usarla
+    if (userRole.role && userRole.role.name) {
+      return userRole.role.name;
+    }
+    
+    // Si no, mostrar el ID del rol
+    return `Rol ${userRole.roleId}`;
+  };
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'No especificada';
+    try {
+      return new Date(dateString).toLocaleDateString();
+    } catch {
+      return 'Fecha inválida';
     }
   };
 
-  // Preparar datos para la tabla
-  const tableData = userRoles.map(role => ({
-    id: role.id,
-    role: role.roleId, // O el nombre del rol si lo tienes
-    assignedAt: role.startAt ? new Date(role.startAt).toLocaleDateString() : 'N/A'
-  }));
-
   if (loading) {
-    return <Typography>Cargando...</Typography>;
+    return (
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Typography>Cargando lista de usuarios...</Typography>
+      </Container>
+    );
   }
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Roles del Usuario
+        Lista de Usuarios y Roles
       </Typography>
 
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Typography variant="h6">
-            Usuario ID: {userId}
-          </Typography>
-          <Typography color="textSecondary">
-            Total de roles asignados: {userRoles.length}
+            Total de usuarios: {usersWithRoles.length}
           </Typography>
         </CardContent>
       </Card>
 
-      <GenericTable
-        data={tableData}
-        columns={["id", "role", "assignedAt"]}
-        actions={[
-          { name: "remove", label: "Remover Rol", color: "error" },
-        ]}
-        onAction={handleAction}
-        title="Roles Asignados"
-      />
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Usuario</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Roles Asignados</TableCell>
+              <TableCell>Período</TableCell>
+              <TableCell>Acciones</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {usersWithRoles.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>
+                  <Typography variant="subtitle2">{user.name}</Typography>
+                </TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  {user.roles.length > 0 ? (
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                      {user.roles.map((userRole, index) => (
+                        <Chip 
+                          key={index}
+                          // USAR LA FUNCIÓN CORREGIDA
+                          label={getRoleName(userRole)}
+                          size="small"
+                          color="primary"
+                          variant="outlined"
+                        />
+                      ))}
+                    </Box>
+                  ) : (
+                    <Typography variant="body2" color="textSecondary">
+                      Sin roles asignados
+                    </Typography>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {user.roles.length > 0 ? (
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                      {user.roles.map((userRole, index) => (
+                        <Typography key={index} variant="caption" display="block">
+                          Desde: {formatDate(userRole.startAt)}
+                          {userRole.endAt && ` • Hasta: ${formatDate(userRole.endAt)}`}
+                        </Typography>
+                      ))}
+                    </Box>
+                  ) : (
+                    <Typography variant="body2" color="textSecondary">
+                      -
+                    </Typography>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {user.roles.length > 0 ? (
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                      {user.roles.map((userRole, index) => (
+                        <Button
+                          key={index}
+                          size="small"
+                          color="error"
+                          onClick={() => handleRemoveRole(user.id, userRole.roleId)}
+                        >
+                          {/* USAR LA FUNCIÓN CORREGIDA */}
+                          Quitar {getRoleName(userRole)}
+                        </Button>
+                      ))}
+                    </Box>
+                  ) : (
+                    <Typography variant="body2" color="textSecondary">
+                      Sin acciones
+                    </Typography>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       <Snackbar
         open={snackbar.open}

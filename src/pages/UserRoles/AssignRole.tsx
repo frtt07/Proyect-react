@@ -4,14 +4,12 @@ import {
   Typography,
   Box,
   Paper,
-  TextField,
   Button,
   Alert,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  Chip,
   Grid,
   Card,
   CardContent,
@@ -63,10 +61,12 @@ const AssignRole: React.FC = () => {
     }
   };
 
-  // En la función loadUserRoles, cambia:
+
     const loadUserRoles = async (userId: number) => {
     try {
-        const roles = await userRoleService.getRolesByUserId(userId);
+
+        const roles = await userRoleService.getUserRolesWithDetails(userId);
+        console.log("📊 UserRoles con detalles:", roles);
         setUserRoles(roles);
     } catch (error) {
         console.error("Error loading user roles:", error);
@@ -85,17 +85,12 @@ const AssignRole: React.FC = () => {
       setError("");
       setSuccess("");
 
-      // Fechas por defecto
-      const startAt = new Date().toISOString();
-      const endAt = new Date();
-      endAt.setFullYear(endAt.getFullYear() + 1); // 1 año por defecto
+      console.log("Enviando datos:", {
+        userId: userId,
+        roleId: roleId
+      });
 
-      const userRole = await userRoleService.assignRoleToUser(
-        userId,
-        roleId,
-        startAt,
-        endAt.toISOString()
-      );
+      const userRole = await userRoleService.assignRoleToUser(userId, roleId);
 
       if (userRole) {
         setSuccess(`Rol asignado correctamente al usuario`);
@@ -106,11 +101,10 @@ const AssignRole: React.FC = () => {
           timer: 3000,
         });
         
-        // Recargar los roles del usuario
         await loadUserRoles(userId);
-        
-        // Limpiar formulario
         setRoleId("");
+      } else {
+        setError("Error al asignar el rol");
       }
     } catch (error: any) {
       const errorMessage = error.message || "Error al asignar el rol";
@@ -150,6 +144,12 @@ const AssignRole: React.FC = () => {
             timer: 3000,
           });
           await loadUserRoles(userId);
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Error al eliminar el rol",
+            icon: "error",
+          });
         }
       } catch (error: any) {
         Swal.fire({
@@ -166,16 +166,32 @@ const AssignRole: React.FC = () => {
     return user ? `${user.name} (${user.email})` : `Usuario ${userId}`;
   };
 
-  const getRoleName = (roleId: number) => {
-    const role = roles.find(r => r.id === roleId);
-    return role ? role.name : `Rol ${roleId}`;
+  // FUNCIÓN CORREGIDA: Obtener nombre del rol desde userRole
+  const getRoleNameFromUserRole = (userRole: UserRole) => {
+    // Si tiene información del role, usarla
+    if (userRole.role && userRole.role.name) {
+      return userRole.role.name;
+    }
+    
+    // Si no, buscar en la lista de roles disponibles
+    const role = roles.find(r => r.id === userRole.roleId);
+    return role ? role.name : `Rol ${userRole.roleId}`;
   };
 
   const getAvailableRoles = () => {
     if (!userId) return roles;
     
     const currentRoleIds = userRoles.map(ur => ur.roleId);
-    return roles.filter(role => !currentRoleIds.includes(role.id));
+    return roles.filter(role => role.id && !currentRoleIds.includes(role.id));
+  };
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'No especificada';
+    try {
+      return new Date(dateString).toLocaleDateString();
+    } catch {
+      return 'Fecha inválida';
+    }
   };
 
   return (
@@ -227,7 +243,10 @@ const AssignRole: React.FC = () => {
               <Select
                 value={roleId}
                 label="Rol"
-                onChange={(e) => setRoleId(e.target.value as number)}
+                onChange={(e) => {
+                  console.log("Rol seleccionado:", e.target.value);
+                  setRoleId(e.target.value as number);
+                }}
                 disabled={!userId}
               >
                 <MenuItem value="">
@@ -275,12 +294,13 @@ const AssignRole: React.FC = () => {
                     <CardContent sx={{ py: 1, "&:last-child": { pb: 1 } }}>
                       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <Box>
+                          {/* USAR LA FUNCIÓN CORREGIDA */}
                           <Typography variant="subtitle1">
-                            {getRoleName(userRole.roleId)}
+                            {getRoleNameFromUserRole(userRole)}
                           </Typography>
                           <Typography variant="caption" color="text.secondary">
-                            Desde: {new Date(userRole.startAt).toLocaleDateString()}
-                            {userRole.endAt && ` • Hasta: ${new Date(userRole.endAt).toLocaleDateString()}`}
+                            Desde: {formatDate(userRole.startAt)}
+                            {userRole.endAt && ` • Hasta: ${formatDate(userRole.endAt)}`}
                           </Typography>
                         </Box>
                         <Button
