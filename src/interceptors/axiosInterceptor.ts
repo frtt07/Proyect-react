@@ -1,12 +1,11 @@
 import axios from "axios";
 
-// Lista de rutas que no deben ser interceptadas
-const EXCLUDED_ROUTES = ["/login", "/register"];
+const EXCLUDED_ROUTES = ["/login", "/register", "/auth"];
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000/api";
 
 const api = axios.create({
-  baseURL: API_BASE_URL, // Ya incluye /api
+  baseURL: API_BASE_URL,
   headers: { "Content-Type": "application/json" },
 });
 
@@ -16,15 +15,18 @@ api.interceptors.request.use(
     console.log(`🚀 ${request.method?.toUpperCase()} ${request.url}`, request.data);
     
     // Verificar si la URL está en la lista de excluidas
-    if (EXCLUDED_ROUTES.some((route) => request.url?.includes(route))) {
-      return request;
+    const shouldExclude = EXCLUDED_ROUTES.some((route) => 
+      request.url?.includes(route)
+    );
+    
+    // Agregar token si la ruta no está excluida
+    if (!shouldExclude) {
+      const token = localStorage.getItem("session") || localStorage.getItem("token");
+      if (token) {
+        request.headers.Authorization = `Bearer ${token}`;
+      }
     }
     
-    const token = localStorage.getItem("session");
-    // Agregar token si la ruta no está excluida
-    if (token) {
-      request.headers.Authorization = `Bearer ${token}`;
-    }
     return request;
   },
   (error) => {
@@ -46,8 +48,15 @@ api.interceptors.response.use(
       console.log("No autorizado, redirigiendo a login...");
       localStorage.removeItem("user");
       localStorage.removeItem("session");
+      localStorage.removeItem("token");
       window.location.href = "/auth/signin";
     }
+    
+    if (error.response?.status === 403) {
+      console.log("Acceso denegado");
+      // Puedes redirigir a una página de acceso denegado si quieres
+    }
+    
     return Promise.reject(error);
   }
 );

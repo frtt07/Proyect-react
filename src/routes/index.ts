@@ -2,7 +2,7 @@ import { lazy } from 'react';
 import ListUsers from '../pages/Users/List';
 import CreateUser from '../pages/Users/Create';
 import UpdateUser from '../pages/Users/Update';
-
+import createProfiles from '../pages/Profiles/Create';
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
 const FormElements = lazy(() => import('../pages/Form/FormElements'));
@@ -22,6 +22,7 @@ const UpdateRole = lazy(() => import('../pages/Roles/Update'));
 const UserRolesList = lazy(() => import('../pages/UserRoles/List'));
 const AssignRole = lazy(() => import('../pages/UserRoles/AssignRole'));
 const UserPasswordsList = lazy(() => import('../pages/Passwords/List'));
+const CreatePassword = lazy(() => import('../pages/Passwords/Create'));
 const ListAddresses = lazy(() => import('../pages/Addresses/List'));
 const CreateAddress = lazy(() => import('../pages/Addresses/Create'));
 const UpdateAddress = lazy(() => import('../pages/Addresses/Update'));
@@ -38,6 +39,21 @@ const coreRoutes = [
     title: 'Roles List',
     component: ListRoles,
   },
+  {
+  path: '/passwords/:userId',
+  title: 'User Passwords',
+  component: UserPasswordsList,
+},
+{
+  path: '/profiles/create',
+  title: 'Create Profile',
+  component: createProfiles,
+},
+{
+  path: '/passwords/:userId/crear',
+  title: 'Create Password',
+  component: CreatePassword,
+},
   {
     path: '/roles/crear',
     title: 'Create Role',
@@ -58,11 +74,7 @@ const coreRoutes = [
     title: 'Assign Role',
     component: AssignRole,
   },
-  {
-    path: '/passwords/:userId',
-    title: 'User Passwords',
-    component: UserPasswordsList,
-  },
+
   {
     path: '/addresses',
     title: 'Addresses List',
@@ -78,7 +90,7 @@ const coreRoutes = [
     title: 'Update Address',
     component: UpdateAddress,
   },
-  // Rutas existentes
+
   {
     path: '/users/editar/:id',
     title: 'Update Users',

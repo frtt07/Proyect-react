@@ -4,4 +4,7 @@ export interface Password {
   passwordHash: string;
   createdAt?: string;
   isActive?: boolean;
+  startAt?: string;
+  endAt?: string;
+  content?: string; 
 }

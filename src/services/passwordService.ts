@@ -1,3 +1,4 @@
+
 import { Password } from "../models/Password";
 import api from "../interceptors/axiosInterceptor";
 
@@ -10,7 +11,7 @@ class PasswordService {
       return response.data;
     } catch (error) {
       console.error("Error al obtener contraseñas:", error);
-      return [];
+      throw error;
     }
   }
 
@@ -20,7 +21,7 @@ class PasswordService {
       return response.data;
     } catch (error) {
       console.error("Error al crear contraseña:", error);
-      return null;
+      throw error;
     }
   }
 
@@ -30,7 +31,7 @@ class PasswordService {
       return response.data;
     } catch (error) {
       console.error("Error al actualizar contraseña:", error);
-      return null;
+      throw error;
     }
   }
 
@@ -40,7 +41,17 @@ class PasswordService {
       return true;
     } catch (error) {
       console.error("Error al eliminar contraseña:", error);
-      return false;
+      throw error;
+    }
+  }
+
+  async getPasswordById(passwordId: number): Promise<Password | null> {
+    try {
+      const response = await api.get<Password>(`${API_URL}/${passwordId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error al obtener contraseña:", error);
+      throw error;
     }
   }
 }
