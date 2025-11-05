@@ -61,23 +61,24 @@ const DigitalSignatureList: React.FC = () => {
 
       {signature ? (
         <Card className="p-6 shadow-sm">
-          <div className="flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start gap-8">
-            {/* Imagen de la firma */}
-            <div className="flex justify-center items-center border border-gray-300 rounded-md bg-gray-50 w-full md:w-[350px] h-[250px]">
+          {/* contenedor principal (fila) */}
+          <div className="flex flex-col md:flex-row items-center md:items-center justify-center md:justify-start gap-8">
+            {/* Imagen de la firma (ancho fijo) */}
+            <div className="flex justify-center items-center border border-gray-300 rounded-md overflow-hidden w-[360px]">
               <img
                 src={`${api.defaults.baseURL}/${signature.photo}`}
                 alt="Digital Signature"
-                className="object-contain max-h-[220px]"
+                className="object-contain w-full h-auto"
               />
             </div>
 
-            {/* Datos del usuario */}
-            <div className="flex flex-col justify-between h-full text-center md:text-left">
+            {/* Datos del usuario (columna derecha centrada verticalmente) */}
+            <div className="flex flex-1 flex-col items-center justify-center text-center gap-4 md:items-center md:text-left">
               <div>
                 <h5 className="text-lg font-semibold mb-1">
                   Name: {signature.user?.name}
                 </h5>
-                <p className="text-gray-600 mb-6">
+                <p className="text-lg font-semibold mb-1">
                   Email: {signature.user?.email}
                 </p>
               </div>
