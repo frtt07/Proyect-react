@@ -1,4 +1,6 @@
-import React from "react";
+import React from 'react';
+import { SelectChangeEvent } from '@mui/material';
+
 import {
   TextField,
   Button,
@@ -13,13 +15,20 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-} from "@mui/material";
+} from '@mui/material';
 
 // Define el tipo correcto para FormField
-interface FormField {
+export interface FormField {
   name: string;
   label: string;
-  type?: "text" | "email" | "password" | "number" | "date" | "boolean" | "select";
+  type?:
+    | 'text'
+    | 'email'
+    | 'password'
+    | 'number'
+    | 'date'
+    | 'boolean'
+    | 'select';
   required?: boolean;
   multiline?: boolean;
   rows?: number;
@@ -40,15 +49,25 @@ const GenericForm: React.FC<GenericFormProps> = ({
   fields,
   initialValues,
   onSubmit,
-  submitLabel = "Guardar",
+  submitLabel = 'Guardar',
   onCancel,
 }) => {
   const [values, setValues] = React.useState(initialValues);
 
-  const handleChange = (field: string) => (event: React.ChangeEvent<HTMLInputElement | { value: unknown }>) => {
-    const value = event.target.type === 'checkbox' ? (event.target as HTMLInputElement).checked : event.target.value;
-    setValues({ ...values, [field]: value });
-  };
+  const handleChange =
+    (field: string) =>
+    (
+      event: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >,
+    ) => {
+      const target = event.target;
+      const value =
+        target.type === 'checkbox'
+          ? (target as HTMLInputElement).checked
+          : target.value;
+      setValues({ ...values, [field]: value });
+    };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -56,7 +75,7 @@ const GenericForm: React.FC<GenericFormProps> = ({
   };
 
   const renderField = (field: FormField) => {
-    if (field.type === "boolean") {
+    if (field.type === 'boolean') {
       return (
         <FormControlLabel
           control={
@@ -71,13 +90,18 @@ const GenericForm: React.FC<GenericFormProps> = ({
       );
     }
 
-    if (field.type === "select" && field.options) {
+    if (field.type === 'select' && field.options) {
+      const handleSelectChange = (event: SelectChangeEvent) => {
+        const value = event.target.value;
+        setValues({ ...values, [field.name]: value });
+      };
+
       return (
         <FormControl fullWidth variant="outlined">
           <InputLabel>{field.label}</InputLabel>
           <Select
             value={values[field.name] || ''}
-            onChange={handleChange(field.name)}
+            onChange={handleSelectChange}
             label={field.label}
           >
             {field.options.map((option) => (
@@ -94,8 +118,8 @@ const GenericForm: React.FC<GenericFormProps> = ({
       <TextField
         fullWidth
         label={field.label}
-        type={field.type || "text"}
-        value={values[field.name] || ""}
+        type={field.type || 'text'}
+        value={values[field.name] || ''}
         onChange={handleChange(field.name)}
         required={field.required}
         variant="outlined"
@@ -121,11 +145,7 @@ const GenericForm: React.FC<GenericFormProps> = ({
             <Grid item xs={12}>
               <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
                 {onCancel && (
-                  <Button
-                    type="button"
-                    variant="outlined"
-                    onClick={onCancel}
-                  >
+                  <Button type="button" variant="outlined" onClick={onCancel}>
                     Cancelar
                   </Button>
                 )}

@@ -4,8 +4,8 @@ export interface Address {
   id?: number;
   street: string;
   number: string;
-  latitude?: number;
-  longitude?: number;
+  latitude?: number | null;
+  longitude?: number | null;
   user_id?: number;
   user?: User;
   created_at?: string;

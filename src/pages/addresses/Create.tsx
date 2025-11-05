@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FormField } from "../../components/Generics/MUI/GenericForm";
+
 import { 
   Container, 
   Typography, 
@@ -26,13 +28,13 @@ const CreateAddress: React.FC = () => {
     lng: null 
   });
 
-  const addressFields = [
-    { name: "street", label: "Calle", type: "text", required: true },
-    { name: "number", label: "Número", type: "text", required: true },
-    { name: "latitude", label: "Latitud", type: "number" },
-    { name: "longitude", label: "Longitud", type: "number" },
-    { name: "user_id", label: "ID de Usuario", type: "number", required: true },
-  ];
+const addressFields: FormField[] = [
+  { name: "street", label: "Calle", type: "text", required: true },
+  { name: "number", label: "Número", type: "text", required: true },
+  { name: "latitude", label: "Latitud", type: "number" },
+  { name: "longitude", label: "Longitud", type: "number" },
+  { name: "user_id", label: "ID de Usuario", type: "number", required: true },
+];
 
   const initialValues: Partial<Address> = {
     street: "",
