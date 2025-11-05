@@ -6,6 +6,10 @@ import createProfiles from '../pages/Profiles/Create';
 import SecurityQuestionList from '../pages/SecurityQuestion/SecurityQuestionList';
 import SecurityQuestionForm from '../pages/SecurityQuestion/SecurityQuestionForm';
 import ListProfile from '../pages/Profiles/List';
+import AnswerList from '../pages/Answers/AnswerList';
+import AnswerForm from '../pages/Answers/AnswerForm';
+import DeviceList from '../pages/devices/DeviceList';
+import DeviceForm from '../pages/devices/DeviceForm';
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
 const FormElements = lazy(() => import('../pages/Form/FormElements'));
@@ -42,8 +46,8 @@ const coreRoutes = [
   },
   {
     path: '/profiles/list',
-  title: 'list Profile',
-  component: ListProfile,
+    title: 'list Profile',
+    component: ListProfile,
   },
   // Tus rutas de gestión de seguridad
   {
@@ -192,6 +196,36 @@ const coreRoutes = [
     path: '/security-questions/editar/:id',
     title: 'Update Question',
     component: SecurityQuestionForm,
+  },
+  {
+    path: '/answers/:userId',
+    title: 'User Answers',
+    component: AnswerList,
+  },
+  {
+    path: '/answers/:userId/crear',
+    title: 'Create Answer',
+    component: AnswerForm,
+  },
+  {
+    path: '/answers/:userId/editar/:id',
+    title: 'Update Answer',
+    component: AnswerForm,
+  },
+  {
+    path: '/device/:userId',
+    title: 'Devices',
+    component: DeviceList,
+  },
+  {
+    path: '/device/:userId/crear',
+    title: 'Create Device',
+    component: DeviceForm,
+  },
+  {
+    path: '/device/:userId/editar/:id',
+    title: 'Update Device',
+    component: DeviceForm,
   },
 ];
 
