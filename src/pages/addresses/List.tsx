@@ -11,9 +11,14 @@ import {
   Card,
   CardContent,
   CardActions,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Chip,
 } from "@mui/material";
-import { Add, Edit, Delete } from "@mui/icons-material";
-import { Address } from "../../models/Address";
+import { Add, Edit, Delete, LocationOn, Close } from "@mui/icons-material";
+import { Address, AddressUtils } from "../../models/Address";
 import { addressService } from "../../services/addressService";
 import Swal from "sweetalert2";
 
@@ -22,6 +27,7 @@ const ListAddresses: React.FC = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState(true);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" as any });
+  const [mapDialog, setMapDialog] = useState({ open: false, address: null as Address | null });
 
   useEffect(() => {
     fetchAddresses();
@@ -65,6 +71,19 @@ const ListAddresses: React.FC = () => {
     });
   };
 
+  const openMapDialog = (address: Address) => {
+    setMapDialog({ open: true, address });
+  };
+
+  const closeMapDialog = () => {
+    setMapDialog({ open: false, address: null });
+  };
+
+  const openInGoogleMaps = (address: Address) => {
+    const mapsUrl = AddressUtils.getGoogleMapsUrl(address);
+    window.open(mapsUrl, '_blank');
+  };
+
   if (loading) {
     return <Typography>Cargando...</Typography>;
   }
@@ -92,16 +111,44 @@ const ListAddresses: React.FC = () => {
                 <Typography variant="h6" gutterBottom>
                   {address.street} {address.number}
                 </Typography>
-                {(address.latitude || address.longitude) && (
-                  <Typography variant="body2" color="textSecondary" gutterBottom>
-                    📍 Lat: {address.latitude}, Lng: {address.longitude}
-                  </Typography>
+                
+                {/* Coordenadas con botón de mapa */}
+                {(address.latitude && address.longitude) ? (
+                  <Box sx={{ mb: 2 }}>
+                    <Chip 
+                      icon={<LocationOn />}
+                      label={`📍 ${address.latitude.toFixed(6)}, ${address.longitude.toFixed(6)}`}
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => openMapDialog(address)}
+                      clickable
+                    />
+                    <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                      Coordenadas precisas disponibles
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Box sx={{ mb: 2 }}>
+                    <Chip 
+                      icon={<LocationOn />}
+                      label="📍 Ver en Google Maps"
+                      variant="outlined"
+                      color="secondary"
+                      onClick={() => openInGoogleMaps(address)}
+                      clickable
+                    />
+                    <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                      Ubicación aproximada por dirección
+                    </Typography>
+                  </Box>
                 )}
+                
+                {/* Información de usuario */}
                 <Typography variant="body2">
                   <strong>Usuario ID:</strong> {address.user_id || "No asignado"}
                 </Typography>
                 
-           
+                {/* Fechas */}
                 {address.created_at && (
                   <Typography variant="body2" sx={{ mt: 1 }}>
                     <strong>Creado:</strong> {new Date(address.created_at).toLocaleDateString()}
@@ -118,6 +165,13 @@ const ListAddresses: React.FC = () => {
                 </Button>
                 <Button
                   size="small"
+                  startIcon={<LocationOn />}
+                  onClick={() => AddressUtils.hasValidCoordinates(address) ? openMapDialog(address) : openInGoogleMaps(address)}
+                >
+                  {AddressUtils.hasValidCoordinates(address) ? 'Ver Mapa' : 'Abrir Maps'}
+                </Button>
+                <Button
+                  size="small"
                   startIcon={<Delete />}
                   color="error"
                   onClick={() => handleDelete(address)}
@@ -129,6 +183,61 @@ const ListAddresses: React.FC = () => {
           </Grid>
         ))}
       </Grid>
+
+      {/* Diálogo de Mapa */}
+      <Dialog 
+        open={mapDialog.open} 
+        onClose={closeMapDialog}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="h6">
+              Ubicación en el Mapa
+            </Typography>
+            <IconButton onClick={closeMapDialog}>
+              <Close />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          {mapDialog.address && (
+            <Box>
+              <Typography variant="body1" gutterBottom>
+                <strong>Dirección:</strong> {mapDialog.address.street} {mapDialog.address.number}
+              </Typography>
+              {mapDialog.address.latitude && mapDialog.address.longitude && (
+                <Typography variant="body2" color="textSecondary" gutterBottom>
+                  <strong>Coordenadas:</strong> {mapDialog.address.latitude.toFixed(6)}, {mapDialog.address.longitude.toFixed(6)}
+                </Typography>
+              )}
+              
+              <Box sx={{ mt: 2, height: '400px', width: '100%' }}>
+                <iframe
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, borderRadius: '8px' }}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                  src={AddressUtils.getEmbeddedMapUrl(mapDialog.address)}
+                />
+              </Box>
+              
+              <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<LocationOn />}
+                  onClick={() => mapDialog.address && openInGoogleMaps(mapDialog.address)}
+                >
+                  Abrir en Google Maps
+                </Button>
+              </Box>
+            </Box>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {addresses.length === 0 && (
         <Box textAlign="center" sx={{ mt: 4 }}>
