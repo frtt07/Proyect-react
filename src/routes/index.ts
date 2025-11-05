@@ -57,7 +57,7 @@ const coreRoutes = [
     component: ListProfile,
   },
   {
-    path: '/permission/LIST',
+    path: '/permission/list',
   title: 'LIST permission',
   component: ListPermissions,
   },
