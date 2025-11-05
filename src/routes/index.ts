@@ -2,10 +2,12 @@ import { lazy } from 'react';
 import ListUsers from '../pages/Users/List';
 import CreateUser from '../pages/Users/Create';
 import UpdateUser from '../pages/Users/Update';
+import ListPermissions from '../pages/Permission/List';
 import createProfiles from '../pages/Profiles/Create';
 import SecurityQuestionList from '../pages/SecurityQuestion/SecurityQuestionList';
 import SecurityQuestionForm from '../pages/SecurityQuestion/SecurityQuestionForm';
 import ListProfile from '../pages/Profiles/List';
+import RolePermissionPage from '../pages/RolePermission/list';
 import AnswerList from '../pages/Answers/AnswerList';
 import AnswerForm from '../pages/Answers/AnswerForm';
 import DeviceList from '../pages/devices/DeviceList';
@@ -45,9 +47,19 @@ const coreRoutes = [
     component: Demo,
   },
   {
+    path: '/RolePermission/list',
+  title: 'list RolePermission',
+  component: RolePermissionPage,
+  },
+  {
     path: '/profiles/list',
     title: 'list Profile',
     component: ListProfile,
+  },
+  {
+    path: '/permission/LIST',
+  title: 'LIST permission',
+  component: ListPermissions,
   },
   // Tus rutas de gestión de seguridad
   {
