@@ -85,7 +85,7 @@ const UserPasswordsList: React.FC = () => {
 
   const processedData = passwords.map(pwd => ({
     ...pwd,
-    createdAt: formatDate(pwd.createdAt),
+    created_at: formatDate(pwd.created_at),
     startAt: formatDate(pwd.startAt),
     endAt: formatDate(pwd.endAt),
     status: pwd.isActive ? 
@@ -131,14 +131,14 @@ const UserPasswordsList: React.FC = () => {
         data={processedData}
         columns={[
           "id", 
-          "createdAt", 
+          "created_at", 
           "startAt", 
           "endAt", 
           "status"
         ]}
         columnNames={{
           id: "ID",
-          createdAt: "Creado",
+          created_at: "Creado",
           startAt: "Inicio",
           endAt: "Expiración",
           status: "Estado"

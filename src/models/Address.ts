@@ -4,12 +4,10 @@ export interface Address {
   id?: number;
   street: string;
   number: string;
-  city: string;
-  state: string;
-  country: string;
-  postalCode: string;
   latitude?: number;
   longitude?: number;
-  userId?: number;
+  user_id?: number;
   user?: User;
+  created_at?: string;
+  updated_at?: string;
 }

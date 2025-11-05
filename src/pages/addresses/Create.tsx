@@ -12,33 +12,24 @@ const CreateAddress: React.FC = () => {
   const addressFields = [
     { name: "street", label: "Calle", type: "text", required: true },
     { name: "number", label: "Número", type: "text", required: true },
-    { name: "city", label: "Ciudad", type: "text", required: true },
-    { name: "state", label: "Estado/Provincia", type: "text", required: true },
-    { name: "country", label: "País", type: "text", required: true },
-    { name: "postalCode", label: "Código Postal", type: "text", required: true },
     { name: "latitude", label: "Latitud", type: "number" },
     { name: "longitude", label: "Longitud", type: "number" },
-    { name: "userId", label: "ID de Usuario", type: "number", required: true },
+    { name: "user_id", label: "ID de Usuario", type: "number", required: true },
   ];
 
   const initialValues: Partial<Address> = {
     street: "",
     number: "",
-    city: "",
-    state: "",
-    country: "",
-    postalCode: "",
-    latitude: 0,
-    longitude: 0,
-    userId: undefined,
+    latitude: undefined,
+    longitude: undefined,
+    user_id: undefined,
   };
 
   const handleSubmit = async (values: Record<string, any>) => {
     try {
       console.log("📦 Datos del formulario:", values);
       
-   
-      const userId = parseInt(values.userId);
+      const userId = parseInt(values.user_id);
       
       if (isNaN(userId)) {
         Swal.fire({
@@ -49,19 +40,15 @@ const CreateAddress: React.FC = () => {
         return;
       }
 
-      // Convertir números y preparar datos
       const addressData = {
         street: values.street,
         number: values.number,
-        city: values.city,
-        state: values.state,
-        country: values.country,
-        postalCode: values.postalCode,
         latitude: values.latitude ? parseFloat(values.latitude) : null,
         longitude: values.longitude ? parseFloat(values.longitude) : null,
+        user_id: userId,
       };
 
-      console.log("🚀 Enviando datos:", { userId, addressData });
+      console.log("🚀 Enviando datos al backend:", addressData);
 
       const address = await addressService.createAddress(userId, addressData);
       

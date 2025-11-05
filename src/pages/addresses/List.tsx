@@ -92,15 +92,19 @@ const ListAddresses: React.FC = () => {
                 <Typography variant="h6" gutterBottom>
                   {address.street} {address.number}
                 </Typography>
-                <Typography color="textSecondary" gutterBottom>
-                  {address.city}, {address.state}
-                </Typography>
+                {(address.latitude || address.longitude) && (
+                  <Typography variant="body2" color="textSecondary" gutterBottom>
+                    📍 Lat: {address.latitude}, Lng: {address.longitude}
+                  </Typography>
+                )}
                 <Typography variant="body2">
-                  {address.country} - {address.postalCode}
+                  <strong>Usuario ID:</strong> {address.user_id || "No asignado"}
                 </Typography>
-                {address.user && (
+                
+           
+                {address.created_at && (
                   <Typography variant="body2" sx={{ mt: 1 }}>
-                    <strong>Usuario:</strong> {address.user.name}
+                    <strong>Creado:</strong> {new Date(address.created_at).toLocaleDateString()}
                   </Typography>
                 )}
               </CardContent>
