@@ -2,7 +2,6 @@ export interface Role {
   id?: number;
   name: string;
   description?: string;
-  isActive?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
+  created_at?: string;  
+  updated_at?: string; 
 }

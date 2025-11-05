@@ -189,15 +189,6 @@ const SignIn: React.FC = () => {
               />
             </Box>
           </GoogleOAuthProvider>
-
-          <Box sx={{ mt: 2, p: 2, backgroundColor: 'grey.100', borderRadius: 1 }}>
-            <Typography variant="caption" color="textSecondary">
-              💡 <strong>Para probar:</strong> 
-              <br />• <strong>Login normal:</strong> Usa un email/password existente en tu BD
-              <br />• <strong>Google OAuth:</strong> Funciona automáticamente con cualquier cuenta Google
-            </Typography>
-          </Box>
-
           <Box sx={{ mt: 3, textAlign: 'center' }}>
             <Typography variant="body2" color="textSecondary">
               ¿No tienes una cuenta?{' '}
