@@ -47,7 +47,6 @@ const UserRolesList: React.FC = () => {
       
       for (const user of users) {
         try {
-          // USAR EL MÉTODO CORREGIDO que incluye nombres de roles
           const userRoles = await userRoleService.getUserRolesWithDetails(user.id);
           
           usersWithRolesData.push({
@@ -108,14 +107,12 @@ const UserRolesList: React.FC = () => {
     });
   };
 
-  // FUNCIÓN CORREGIDA: Obtener nombre del rol desde userRole
   const getRoleName = (userRole: UserRole) => {
-    // Si tiene información del role, usarla
+
     if (userRole.role && userRole.role.name) {
       return userRole.role.name;
     }
     
-    // Si no, mostrar el ID del rol
     return `Rol ${userRole.roleId}`;
   };
 

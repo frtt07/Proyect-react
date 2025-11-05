@@ -13,5 +13,5 @@ export interface User {
     token?: string;
     address?: Address;
     profile?: Profile;
-    picture?: string; // Nuevo campo para foto de Google
+    picture?: string;
 }

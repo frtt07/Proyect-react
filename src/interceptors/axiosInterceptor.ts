@@ -14,7 +14,6 @@ api.interceptors.request.use(
   (request) => {
     console.log(`🚀 ${request.method?.toUpperCase()} ${request.url}`, request.data);
     
-    // Verificar si la URL está en la lista de excluidas
     const shouldExclude = EXCLUDED_ROUTES.some((route) => 
       request.url?.includes(route)
     );
@@ -54,7 +53,7 @@ api.interceptors.response.use(
     
     if (error.response?.status === 403) {
       console.log("Acceso denegado");
-      // Puedes redirigir a una página de acceso denegado si quieres
+     
     }
     
     return Promise.reject(error);

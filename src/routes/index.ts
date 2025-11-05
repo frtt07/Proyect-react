@@ -33,7 +33,6 @@ const coreRoutes = [
     title: 'Demo',
     component: Demo,
   },
-  // Tus rutas de gestión de seguridad
   {
     path: '/roles',
     title: 'Roles List',

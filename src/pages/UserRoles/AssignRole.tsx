@@ -166,14 +166,11 @@ const AssignRole: React.FC = () => {
     return user ? `${user.name} (${user.email})` : `Usuario ${userId}`;
   };
 
-  // FUNCIÓN CORREGIDA: Obtener nombre del rol desde userRole
   const getRoleNameFromUserRole = (userRole: UserRole) => {
-    // Si tiene información del role, usarla
     if (userRole.role && userRole.role.name) {
       return userRole.role.name;
     }
-    
-    // Si no, buscar en la lista de roles disponibles
+
     const role = roles.find(r => r.id === userRole.roleId);
     return role ? role.name : `Rol ${userRole.roleId}`;
   };

@@ -84,7 +84,6 @@ const CreatePassword: React.FC = () => {
         severity: "success"
       });
 
-      // Redirigir después de 2 segundos
       setTimeout(() => {
         navigate(`/passwords/${validUserId}`);
       }, 2000);
