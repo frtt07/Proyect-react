@@ -1,12 +1,9 @@
 import { User } from "../models/User";
 import api from "../interceptors/axiosInterceptor";
 
-const API_URL = "/users"; // 👈 api ya incluye la baseURL en el interceptor
+const API_URL = "/users"; 
 
 class UserService {
-    /**
-     * 🔹 Obtener todos los usuarios
-     */
     async getUsers(): Promise<User[]> {
         try {
             const response = await api.get(API_URL);
@@ -18,9 +15,6 @@ class UserService {
     }
 
     
-    /**
-     * 🔹 Obtener usuario por ID
-     */
     async getUserById(id: number): Promise<User | null> {
         try {
             const response = await api.get<User>(`${API_URL}/${id}`);
@@ -44,10 +38,8 @@ class UserService {
         }
     }
 
-    /**
-     * 🔹 Actualizar usuario
-     * Permite actualizar su perfil, dirección u otros campos
-     */
+    //Actualizar usuarioPermite actualizar su perfil, dirección u otros campos
+    
     async updateUser(id: number, user: Partial<User>): Promise<User | null> {
         try {
             const response = await api.put<User>(`${API_URL}/${id}`, user);
@@ -58,9 +50,7 @@ class UserService {
         }
     }
 
-    /**
-     * 🔹 Eliminar usuario
-     */
+    // Eliminar usuario
     async deleteUser(id: number): Promise<boolean> {
         try {
             await api.delete(`${API_URL}/${id}`);

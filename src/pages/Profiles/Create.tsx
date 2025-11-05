@@ -31,7 +31,8 @@ const CreateProfile: React.FC = () => {
             formData.append("id", profile.id.toString());
             formData.append("phone", profile.phone);
             if (profile.photoURL instanceof File) {
-                formData.append("photoURL", profile.photoURL);
+                // 👇 El backend espera el campo "photo", NO "photoURL"
+                formData.append("photo", profile.photoURL);
             }
 
             // 🔹 Crear perfil en el backend
@@ -52,19 +53,19 @@ const CreateProfile: React.FC = () => {
                     await userService.updateUser(updatedUser.id!, updatedUser);
                 }
 
-                // 🔄 Refrescamos usuarios para reflejar el cambio
+                // 🔄 Refrescar lista de usuarios
                 await fetchUsers();
 
                 Swal.fire({
-                    title: "Completado",
-                    text: "Se ha creado correctamente el perfil",
+                    title: "✅ Completado",
+                    text: "El perfil se ha creado correctamente",
                     icon: "success",
                     timer: 2500,
                     showConfirmButton: false,
                 });
             } else {
                 Swal.fire({
-                    title: "Error",
+                    title: "❌ Error",
                     text: "Hubo un problema al crear el perfil",
                     icon: "error",
                     timer: 2500,
@@ -83,8 +84,9 @@ const CreateProfile: React.FC = () => {
         }
     };
 
+
     return (
-        <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded-2xl shadow-xl">
+        <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded-2xl shadow-xl border border-gray-200">
             <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
                 Crear Perfil
             </h2>
@@ -106,7 +108,7 @@ const CreateProfile: React.FC = () => {
                 })}
                 onSubmit={(values, { resetForm }) => {
                     const formattedProfile: Profile = {
-                        id: Number(values.id), // ✅ id del perfil = id del usuario
+                        id: Number(values.id),
                         phone: values.phone,
                         photoURL: values.photoURL,
                     };
@@ -130,11 +132,8 @@ const CreateProfile: React.FC = () => {
                                 id="id"
                                 name="id"
                                 value={values.id}
-                                onChange={(e) => {
-                                    const selected = e.target.value;
-                                    setFieldValue("id", selected);
-                                }}
-                                className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                onChange={(e) => setFieldValue("id", e.target.value)}
+                                className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                             >
                                 <option value="">Seleccione un usuario</option>
                                 {users.map((user) => (
@@ -163,7 +162,7 @@ const CreateProfile: React.FC = () => {
                                 type="text"
                                 name="phone"
                                 placeholder="Ej: 3124567890"
-                                className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                             />
                             <ErrorMessage
                                 name="phone"
@@ -189,7 +188,7 @@ const CreateProfile: React.FC = () => {
                                     const file = event.currentTarget.files?.[0] || null;
                                     setFieldValue("photoURL", file);
                                 }}
-                                className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-sky-500 focus:outline-none"
                             />
                             <ErrorMessage
                                 name="photoURL"
@@ -198,26 +197,26 @@ const CreateProfile: React.FC = () => {
                             />
                         </div>
 
-                        {/* 🔹 Botón */}
+                        {/* 🔹 Botón Crear */}
                         <div className="text-center mt-6">
                             <button
                                 type="submit"
                                 className="
                                     w-full
-                                    bg-blue-700 
-                                    text-yellow-100 
-                                    font-extrabold 
-                                    text-lg 
-                                    py-3 
-                                    rounded-xl 
-                                    shadow-lg 
-                                    hover:bg-blue-800 
-                                    hover:text-white 
-                                    transition-all 
-                                    duration-300 
-                                    transform 
+                                    bg-sky-600
+                                    text-yellow-100
+                                    font-bold
+                                    text-lg
+                                    py-3
+                                    rounded-xl
+                                    shadow-md
+                                    hover:bg-sky-700
+                                    hover:text-white
+                                    transition-all
+                                    duration-300
+                                    transform
                                     hover:scale-105
-                                "
+                                    "
                             >
                                 Crear Perfil
                             </button>

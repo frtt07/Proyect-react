@@ -27,13 +27,13 @@ interface GenericTableProps {
   title?: string;
 }
 
-const GenericTable: React.FC<GenericTableProps> = ({ 
-  data, 
-  columns, 
+const GenericTable: React.FC<GenericTableProps> = ({
+  data,
+  columns,
   columnNames = {},
-  actions, 
+  actions,
   onAction,
-  title 
+  title
 }) => {
   const getColumnName = (column: string) => {
     return columnNames[column] || column.charAt(0).toUpperCase() + column.slice(1);
@@ -46,16 +46,16 @@ const GenericTable: React.FC<GenericTableProps> = ({
           {title}
         </Typography>
       )}
-      
+
       <TableContainer component={Paper} elevation={3}>
         <Table sx={{ minWidth: 650 }} aria-label="generic table">
           <TableHead>
             <TableRow sx={{ backgroundColor: 'primary.main' }}>
               {columns.map((col) => (
-                <TableCell 
-                  key={col} 
-                  sx={{ 
-                    color: 'white', 
+                <TableCell
+                  key={col}
+                  sx={{
+                    color: 'white',
                     fontWeight: 'bold',
                     fontSize: '0.875rem'
                   }}
@@ -64,9 +64,9 @@ const GenericTable: React.FC<GenericTableProps> = ({
                 </TableCell>
               ))}
               {actions.length > 0 && (
-                <TableCell 
-                  sx={{ 
-                    color: 'white', 
+                <TableCell
+                  sx={{
+                    color: 'white',
                     fontWeight: 'bold',
                     fontSize: '0.875rem'
                   }}
@@ -79,9 +79,9 @@ const GenericTable: React.FC<GenericTableProps> = ({
           <TableBody>
             {data.length > 0 ? (
               data.map((item, index) => (
-                <TableRow 
+                <TableRow
                   key={index}
-                  sx={{ 
+                  sx={{
                     '&:nth-of-type(odd)': { backgroundColor: 'action.hover' },
                     '&:last-child td, &:last-child th': { border: 0 }
                   }}
@@ -101,7 +101,7 @@ const GenericTable: React.FC<GenericTableProps> = ({
                             size="small"
                             color={action.color}
                             onClick={() => onAction(action.name, item)}
-                            sx={{ 
+                            sx={{
                               minWidth: 'auto',
                               fontSize: '0.75rem'
                             }}
@@ -116,8 +116,8 @@ const GenericTable: React.FC<GenericTableProps> = ({
               ))
             ) : (
               <TableRow>
-                <TableCell 
-                  colSpan={columns.length + (actions.length > 0 ? 1 : 0)} 
+                <TableCell
+                  colSpan={columns.length + (actions.length > 0 ? 1 : 0)}
                   align="center"
                   sx={{ py: 3 }}
                 >

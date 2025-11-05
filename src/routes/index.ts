@@ -5,6 +5,7 @@ import UpdateUser from '../pages/Users/Update';
 import createProfiles from '../pages/Profiles/Create';
 import SecurityQuestionList from '../pages/SecurityQuestion/SecurityQuestionList';
 import SecurityQuestionForm from '../pages/SecurityQuestion/SecurityQuestionForm';
+import ListProfile from '../pages/Profiles/List';
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
 const FormElements = lazy(() => import('../pages/Form/FormElements'));
@@ -39,6 +40,12 @@ const coreRoutes = [
     title: 'Demo',
     component: Demo,
   },
+  {
+    path: '/profiles/list',
+  title: 'list Profile',
+  component: ListProfile,
+  },
+  // Tus rutas de gestión de seguridad
   {
     path: '/roles',
     title: 'Roles List',
