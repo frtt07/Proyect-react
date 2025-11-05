@@ -1,12 +1,29 @@
 import axios from "axios";
 import { Profile } from "../models/Profile";
 
-const API_URL = import.meta.env.VITE_API_URL + "/profiles"; // 👈 en plural
+const API_URL = `${import.meta.env.VITE_API_URL}/profiles`;
 
 class ProfileService {
-    /**
-     * 🔹 Obtener un perfil por su ID (que coincide con el ID del usuario)
-     */
+    async getAllProfiles(): Promise<any[] | null> {
+        try {
+            const response = await axios.get(API_URL);
+            console.log("✅ Respuesta del backend:", response.data);
+            // Si el backend devuelve directamente un array:
+            if (Array.isArray(response.data)) {
+                return response.data;
+            }
+            // Si devuelve un objeto con una propiedad "profiles":
+            if (response.data.profiles) {
+                return response.data.profiles;
+            }
+            return [];
+        } catch (error) {
+            console.error("❌ Error al obtener perfiles:", error);
+            return null;
+        }
+    }
+
+
     async getProfileById(id: number): Promise<Profile | null> {
         try {
             const response = await axios.get<Profile>(`${API_URL}/${id}`);
@@ -17,20 +34,13 @@ class ProfileService {
         }
     }
 
-    /**
-     * 🔹 Crear un perfil asociado a un usuario (ID del perfil = ID del usuario)
-     * 
-     * Acepta tanto un objeto Profile como un FormData (ideal para subir imagen)
-     */
     async createProfile(profileData: Profile | FormData): Promise<Profile | null> {
         try {
             let formData: FormData;
 
-            // Si ya viene como FormData, úsalo tal cual
             if (profileData instanceof FormData) {
                 formData = profileData;
             } else {
-                // Si no, construimos el FormData manualmente
                 formData = new FormData();
                 formData.append("phone", profileData.phone);
                 if (profileData.photoURL instanceof File) {
@@ -38,7 +48,6 @@ class ProfileService {
                 }
             }
 
-            // 🔹 El backend espera que la ruta sea /profiles/user/:id
             const id = profileData instanceof FormData
                 ? formData.get("id")
                 : profileData.id;
@@ -46,9 +55,7 @@ class ProfileService {
             const url = `${API_URL}/user/${id}`;
 
             const response = await axios.post<Profile>(url, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
+                headers: { "Content-Type": "multipart/form-data" },
             });
 
             return response.data;
@@ -58,9 +65,6 @@ class ProfileService {
         }
     }
 
-    /**
-     * 🔹 Actualizar perfil (por ID)
-     */
     async updateProfile(id: number, profile: Partial<Profile>): Promise<Profile | null> {
         try {
             const response = await axios.put<Profile>(`${API_URL}/${id}`, profile);
@@ -71,9 +75,6 @@ class ProfileService {
         }
     }
 
-    /**
-     * 🔹 Eliminar perfil
-     */
     async deleteProfile(id: number): Promise<boolean> {
         try {
             await axios.delete(`${API_URL}/${id}`);
