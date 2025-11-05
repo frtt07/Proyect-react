@@ -6,4 +6,5 @@ export interface DigitalSignature {
     name?: string;
     email?: string;
   };
+  user_id: number;
 }

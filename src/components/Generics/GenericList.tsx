@@ -15,7 +15,7 @@ import {
 interface Action {
   name: string;
   label: string;
-  color: "primary" | "secondary" | "error" | "info" | "success" | "warning";
+  color?: "primary" | "secondary" | "error" | "info" | "success" | "warning";
 }
 
 interface GenericTableProps {

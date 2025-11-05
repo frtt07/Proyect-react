@@ -90,7 +90,7 @@ const ListRoles: React.FC = () => {
 
       <GenericTable
         data={roles}
-        columns={["id", "name", "description", "isActive"]}
+        columns={["id", "nombre", "descripción", "isActive"]}
         actions={[
           { name: "edit", label: "Editar", color: "primary" },
           { name: "delete", label: "Eliminar", color: "error" },

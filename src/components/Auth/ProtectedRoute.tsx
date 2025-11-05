@@ -38,7 +38,7 @@ const ProtectedRoute = () => {
 
   console.log("🎯 Redirigiendo:", isAuthenticated ? "A la app" : "Al login");
   
-  return isAuthenticated ? <Outlet /> : <Navigate to="/auth/signin" replace />;
+  return !isAuthenticated ? <Outlet /> : <Navigate to="/auth/signin" replace />;
 };
 
 export default ProtectedRoute;

@@ -75,9 +75,10 @@ const ListUsers: React.FC = () => {
                 data={users}
                 columns={["id", "name", "email"]}
                 actions={[
-                    { name: "edit", label: "Editar" },
-                    { name: "delete", label: "Eliminar" },
-                    { name: "signature", label: "Firma" },
+                    { name: "edit", label: "Editar", color: "primary" },
+                    { name: "delete", label: "Eliminar", color: "primary"},
+                    { name: "signature", label: "Firma", color: "primary" },
+                    { name: "question", label: "Pregunta", color: "primary" },
                 ]}
                 onAction={handleAction}
             />

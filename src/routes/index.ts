@@ -3,6 +3,8 @@ import ListUsers from '../pages/Users/List';
 import CreateUser from '../pages/Users/Create';
 import UpdateUser from '../pages/Users/Update';
 import createProfiles from '../pages/Profiles/Create';
+import SecurityQuestionList from '../pages/SecurityQuestion/SecurityQuestionList';
+import SecurityQuestionForm from '../pages/SecurityQuestion/SecurityQuestionForm';
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
 const FormElements = lazy(() => import('../pages/Form/FormElements'));
@@ -13,8 +15,12 @@ const Tables = lazy(() => import('../pages/Tables'));
 const Alerts = lazy(() => import('../pages/UiElements/Alerts'));
 const Buttons = lazy(() => import('../pages/UiElements/Buttons'));
 const Demo = lazy(() => import('../pages/Demo'));
-const DigitalSignatureList = lazy(() => import('../pages/DigitalSignature/DigSigList'));
-const DigitalSignatureForm = lazy(() => import('../pages/DigitalSignature/DigSigForm'));
+const DigitalSignatureList = lazy(
+  () => import('../pages/DigitalSignature/DigSigList'),
+);
+const DigitalSignatureForm = lazy(
+  () => import('../pages/DigitalSignature/DigSigForm'),
+);
 
 const ListRoles = lazy(() => import('../pages/Roles/List'));
 const CreateRole = lazy(() => import('../pages/Roles/Create'));
@@ -23,9 +29,9 @@ const UserRolesList = lazy(() => import('../pages/UserRoles/List'));
 const AssignRole = lazy(() => import('../pages/UserRoles/AssignRole'));
 const UserPasswordsList = lazy(() => import('../pages/Passwords/List'));
 const CreatePassword = lazy(() => import('../pages/Passwords/Create'));
-const ListAddresses = lazy(() => import('../pages/Addresses/List'));
-const CreateAddress = lazy(() => import('../pages/Addresses/Create'));
-const UpdateAddress = lazy(() => import('../pages/Addresses/Update'));
+const ListAddresses = lazy(() => import('../pages/addresses/List'));
+const CreateAddress = lazy(() => import('../pages/addresses/Create'));
+const UpdateAddress = lazy(() => import('../pages/addresses/Update'));
 
 const coreRoutes = [
   {
@@ -33,27 +39,26 @@ const coreRoutes = [
     title: 'Demo',
     component: Demo,
   },
-  // Tus rutas de gestión de seguridad
   {
     path: '/roles',
     title: 'Roles List',
     component: ListRoles,
   },
   {
-  path: '/passwords/:userId',
-  title: 'User Passwords',
-  component: UserPasswordsList,
-},
-{
-  path: '/profiles/create',
-  title: 'Create Profile',
-  component: createProfiles,
-},
-{
-  path: '/passwords/:userId/crear',
-  title: 'Create Password',
-  component: CreatePassword,
-},
+    path: '/passwords/:userId',
+    title: 'User Passwords',
+    component: UserPasswordsList,
+  },
+  {
+    path: '/profiles/create',
+    title: 'Create Profile',
+    component: createProfiles,
+  },
+  {
+    path: '/passwords/:userId/crear',
+    title: 'Create Password',
+    component: CreatePassword,
+  },
   {
     path: '/roles/crear',
     title: 'Create Role',
@@ -165,6 +170,21 @@ const coreRoutes = [
     path: '/digital-signature/:userId/editar/:id',
     title: 'Update Digital Signature',
     component: DigitalSignatureForm,
+  },
+  {
+    path: '/security-questions',
+    title: 'Security Questions List',
+    component: SecurityQuestionList,
+  },
+  {
+    path: '/security-questions/crear',
+    title: 'Create Question',
+    component: SecurityQuestionForm,
+  },
+  {
+    path: '/security-questions/editar/:id',
+    title: 'Update Question',
+    component: SecurityQuestionForm,
   },
 ];
 
