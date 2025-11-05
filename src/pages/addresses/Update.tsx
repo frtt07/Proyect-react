@@ -47,10 +47,6 @@ const UpdateAddress: React.FC = () => {
   const addressFields = [
     { name: "street", label: "Calle", type: "text", required: true },
     { name: "number", label: "Número", type: "text", required: true },
-    { name: "city", label: "Ciudad", type: "text", required: true },
-    { name: "state", label: "Estado/Provincia", type: "text", required: true },
-    { name: "country", label: "País", type: "text", required: true },
-    { name: "postalCode", label: "Código Postal", type: "text", required: true },
     { name: "latitude", label: "Latitud", type: "number" },
     { name: "longitude", label: "Longitud", type: "number" },
   ];
@@ -58,11 +54,11 @@ const UpdateAddress: React.FC = () => {
   const handleSubmit = async (values: Record<string, any>) => {
     try {
       if (address?.id) {
-        // Convertir números
         const processedValues = {
-          ...values,
-          latitude: values.latitude ? parseFloat(values.latitude) : undefined,
-          longitude: values.longitude ? parseFloat(values.longitude) : undefined,
+          street: values.street,
+          number: values.number,
+          latitude: values.latitude ? parseFloat(values.latitude) : null,
+          longitude: values.longitude ? parseFloat(values.longitude) : null,
         };
 
         const updatedAddress = await addressService.updateAddress(address.id, processedValues);

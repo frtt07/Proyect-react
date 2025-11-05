@@ -27,7 +27,7 @@ const CreatePassword: React.FC = () => {
     endAt: ""
   });
 
-  // Verificar que el userId sea válido
+
   useEffect(() => {
     if (userId) {
       const parsedUserId = parseInt(userId);

@@ -89,15 +89,15 @@ const ListRoles: React.FC = () => {
       </Box>
 
       <GenericTable
-        data={roles}
-        columns={["id", "nombre", "descripción", "isActive"]}
-        actions={[
-          { name: "edit", label: "Editar", color: "primary" },
-          { name: "delete", label: "Eliminar", color: "error" },
-        ]}
-        onAction={handleAction}
-        title="Lista de Roles"
-      />
+      data={roles}
+      columns={["id", "name", "description", "created_at"]} // ← Usar nombres reales
+      actions={[
+        { name: "edit", label: "Editar", color: "primary" },
+        { name: "delete", label: "Eliminar", color: "error" },
+      ]}
+      onAction={handleAction}
+      title="Lista de Roles"
+    />
 
       <Snackbar
         open={snackbar.open}
