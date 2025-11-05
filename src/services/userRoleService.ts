@@ -8,12 +8,11 @@ class UserRoleService {
   async getUserRoles(userId: number): Promise<UserRole[]> {
     try {
       const response = await api.get(`${API_URL}/user/${userId}`);
-      // MAPEAR LOS DATOS DEL BACKEND AL FRONTEND
       const backendData = response.data;
       return backendData.map((item: any) => ({
         id: item.id,
-        userId: item.user_id, // Mapear user_id → userId
-        roleId: item.role_id, // Mapear role_id → roleId
+        userId: item.user_id,
+        roleId: item.role_id, 
         startAt: item.startAt,
         endAt: item.endAt,
         createdAt: item.created_at,
@@ -25,18 +24,15 @@ class UserRoleService {
     }
   }
 
-  // MÉTODO NUEVO: Obtener user roles con información de roles
   async getUserRolesWithRoleDetails(userId: number): Promise<UserRole[]> {
     try {
       const userRoles = await this.getUserRoles(userId);
       
       if (userRoles.length === 0) return [];
       
-      // Obtener todos los roles para mapear los nombres
       const rolesResponse = await api.get("/roles");
       const allRoles: Role[] = rolesResponse.data;
       
-      // Combinar userRoles con información de roles
       return userRoles.map(userRole => ({
         ...userRole,
         role: allRoles.find(role => role.id === userRole.roleId) || { 
@@ -46,7 +42,7 @@ class UserRoleService {
       }));
     } catch (error) {
       console.error("Error al obtener roles del usuario con detalles:", error);
-      return this.getUserRoles(userId); // Fallback a datos básicos
+      return this.getUserRoles(userId); 
     }
   }
 
@@ -67,12 +63,11 @@ class UserRoleService {
       
       const response = await api.post<any>(`${API_URL}/user/${userId}/role/${roleId}`, payload);
       
-      // MAPEAR LA RESPUESTA DEL BACKEND
       const backendData = response.data;
       return {
         id: backendData.id,
-        userId: backendData.user_id, // Mapear user_id → userId
-        roleId: backendData.role_id, // Mapear role_id → roleId
+        userId: backendData.user_id, 
+        roleId: backendData.role_id, 
         startAt: backendData.startAt,
         endAt: backendData.endAt,
         createdAt: backendData.created_at,
@@ -100,12 +95,10 @@ class UserRoleService {
     }
   }
 
-  // MÉTODO ACTUALIZADO - usar el nuevo método con detalles
   async getRolesByUserId(userId: number): Promise<UserRole[]> {
     return this.getUserRolesWithRoleDetails(userId);
   }
 
-  // MÉTODO ACTUALIZADO - usar el nuevo método con detalles
   async getUserRolesWithDetails(userId: number): Promise<UserRole[]> {
     return this.getUserRolesWithRoleDetails(userId);
   }
@@ -114,12 +107,12 @@ class UserRoleService {
     try {
       const response = await api.put<any>(`${API_URL}/${userRoleId}`, userRoleData);
       
-      // MAPEAR LA RESPUESTA DEL BACKEND
+
       const backendData = response.data;
       return {
         id: backendData.id,
-        userId: backendData.user_id, // Mapear user_id → userId
-        roleId: backendData.role_id, // Mapear role_id → roleId
+        userId: backendData.user_id, 
+        roleId: backendData.role_id, 
         startAt: backendData.startAt,
         endAt: backendData.endAt,
         createdAt: backendData.created_at,

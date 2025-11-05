@@ -79,7 +79,7 @@ const SignIn: React.FC = () => {
     setLoading(false);
   };
 
-  // Tu Client ID real de Google
+  // Client de google
   const GOOGLE_CLIENT_ID = "408294359663-pihvunt5ou1h5nkul77du76vvlsq66d1.apps.googleusercontent.com";
 
   return (
@@ -190,7 +190,6 @@ const SignIn: React.FC = () => {
             </Box>
           </GoogleOAuthProvider>
 
-          {/* Información para desarrollo */}
           <Box sx={{ mt: 2, p: 2, backgroundColor: 'grey.100', borderRadius: 1 }}>
             <Typography variant="caption" color="textSecondary">
               💡 <strong>Para probar:</strong> 

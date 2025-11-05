@@ -1,23 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-
-
+import SecurityService from '../services/securityService';
 import UserOne from '../images/user/user-01.png';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  
-  //Esto lee la base de datos global del store
   const user = useSelector((state: RootState) => state.user.user);
-  //------------------------------------------------------
+  const navigate = useNavigate();
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
-  // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!dropdown.current) return;
@@ -33,7 +28,7 @@ const DropdownUser = () => {
     return () => document.removeEventListener('click', clickHandler);
   });
 
-  // close if the esc key is pressed
+
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -42,6 +37,23 @@ const DropdownUser = () => {
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
   });
+
+  // aca esta la función para el cierre de sesión
+  const handleLogout = () => {
+    console.log("🚪 Cerrando sesión...");
+    
+    // 1. Cerrar sesión en el servicio de seguridad
+    SecurityService.logout();
+    
+    // 2. Cerrar el dropdown
+    setDropdownOpen(false);
+    
+    // 3. Redirigir al login después de un pequeño delay
+    setTimeout(() => {
+      navigate('/auth/signin');
+      console.log("✅ Redirigiendo al login...");
+    }, 300);
+  };
 
   return (
     <div className="relative">
@@ -55,7 +67,9 @@ const DropdownUser = () => {
           <span className="block text-sm font-medium text-black dark:text-white">
             {user ? user.name : 'Guest'}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">
+            {user ? user.email : 'No autenticado'}
+          </span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
@@ -95,6 +109,7 @@ const DropdownUser = () => {
             <Link
               to="/profile"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              onClick={() => setDropdownOpen(false)}
             >
               <svg
                 className="fill-current"
@@ -120,6 +135,7 @@ const DropdownUser = () => {
             <Link
               to="#"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              onClick={() => setDropdownOpen(false)}
             >
               <svg
                 className="fill-current"
@@ -141,6 +157,7 @@ const DropdownUser = () => {
             <Link
               to="/settings"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              onClick={() => setDropdownOpen(false)}
             >
               <svg
                 className="fill-current"
@@ -163,7 +180,12 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        
+        {/* 🔥 BOTÓN DE LOGOUT CORREGIDO */}
+        <button 
+          onClick={handleLogout}
+          className="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base cursor-pointer"
+        >
           <svg
             className="fill-current"
             width="22"
@@ -184,7 +206,6 @@ const DropdownUser = () => {
           Log Out
         </button>
       </div>
-      {/* <!-- Dropdown End --> */}
     </div>
   );
 };
