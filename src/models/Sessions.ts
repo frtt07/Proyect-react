@@ -1,9 +1,10 @@
-import { User } from "./User.ts";
+import { User } from "./User";
 
-export interface session {
-    id?: number;
-    token?: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-    user?: User;
+export interface Session {
+  id: string | null;
+  token: string;
+  expiration: string;
+  FACode: string;
+  state: string;
+  user: User; // o pon el tipo real si tienes la clase User
 }

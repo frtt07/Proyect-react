@@ -66,6 +66,8 @@ const ListRoles: React.FC = () => {
           }
         }
       });
+    } else if (action === "permissions") {
+      navigate(`/permission/list`);
     }
   };
 
@@ -94,6 +96,7 @@ const ListRoles: React.FC = () => {
       actions={[
         { name: "edit", label: "Editar", color: "primary" },
         { name: "delete", label: "Eliminar", color: "error" },
+        { name: "permissions", label: "Permisos", color: "success" },
       ]}
       onAction={handleAction}
       title="Lista de Roles"

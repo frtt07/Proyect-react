@@ -53,8 +53,16 @@ const ListUsers: React.FC = () => {
       navigate(`/digital-signature/${item.id}`);
     } else if (action === 'answers') {
       navigate(`/answers/${item.id}`);
-    } else if (action === 'device') {
+    } else if (action === 'devices') {
       navigate(`/device/${item.id}`);
+    } else if (action === 'profile') {
+      navigate(`/profile/${item.id}`);
+    } else if (action === 'address') {
+      navigate(`/addresses`);
+    } else if (action === 'passwords') {
+      navigate(`/passwords/${item.id}`);
+    } else if (action === 'sessions') {
+      navigate(`/sessions/${item.id}`);
     }
   };
 
@@ -92,7 +100,11 @@ const ListUsers: React.FC = () => {
           { name: 'delete', label: 'Eliminar', color: 'error' },
           { name: 'signature', label: 'Firma', color: 'secondary' },
           { name: 'answers', label: 'Respuestas', color: 'success' },
-          { name: 'device', label: 'Dispositivos', color: 'info' },
+          { name: 'devices', label: 'Dispositivos', color: 'info' },
+          { name: 'profile', label: 'Perfil', color: 'error' },
+          { name: 'address', label: 'Direccion', color: 'secondary' },
+          { name: 'passwords', label: 'Contraseñas', color: 'success' },
+          { name: 'sessions', label: 'Sesiones', color: 'info' },
         ]}
         onAction={handleAction}
       />

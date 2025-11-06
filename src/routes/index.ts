@@ -12,6 +12,8 @@ import AnswerList from '../pages/Answers/AnswerList';
 import AnswerForm from '../pages/Answers/AnswerForm';
 import DeviceList from '../pages/devices/DeviceList';
 import DeviceForm from '../pages/devices/DeviceForm';
+import SessionList from '../pages/Sessions/SessionsList';
+import SessionForm from '../pages/Sessions/SessionForm';
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
 const FormElements = lazy(() => import('../pages/Form/FormElements'));
@@ -239,6 +241,23 @@ const coreRoutes = [
     title: 'Update Device',
     component: DeviceForm,
   },
+  {
+  path: '/sessions',
+  title: 'Sessions List',
+  component: SessionList,
+},
+{
+  path: '/sessions/:userId',
+  title: 'User Sessions',
+  component: SessionList,
+},
+{
+  path: '/sessions/:userId/crear',
+  title: 'Create Session',
+  component: SessionForm,
+},
+
+
 ];
 
 const routes = [...coreRoutes];
