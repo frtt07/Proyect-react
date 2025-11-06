@@ -18,11 +18,13 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
+import { GitHub, Microsoft } from "@mui/icons-material";
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [providerLoading, setProviderLoading] = useState<string | null>(null);
 
   const handleLogin = async (user: User) => {
     setLoading(true);
@@ -33,7 +35,6 @@ const SignIn: React.FC = () => {
       const response = await SecurityService.login(user);
       console.log('✅ Login exitoso:', response);
       
-      // Redirigir al dashboard después del login exitoso
       navigate("/", { replace: true });
       
     } catch (error: any) {
@@ -45,7 +46,7 @@ const SignIn: React.FC = () => {
   };
 
   const handleGoogleLogin = async (credentialResponse: any) => {
-    setLoading(true);
+    setProviderLoading('google');
     setError("");
     
     try {
@@ -58,28 +59,65 @@ const SignIn: React.FC = () => {
       const decoded: any = jwtDecode(credentialResponse.credential);
       console.log('👤 Token de Google decodificado:', decoded);
       
-      // Usar el nuevo método para login con Google
       const userData = await SecurityService.loginWithGoogle(decoded);
       console.log('✅ Login con Google exitoso:', userData);
       
-      // Redirigir al dashboard
       navigate("/", { replace: true });
       
     } catch (error: any) {
       console.error('❌ Error en login con Google:', error);
       setError(error.message || "Error al autenticar con Google.");
     } finally {
-      setLoading(false);
+      setProviderLoading(null);
+    }
+  };
+
+  const handleGitHubLogin = async () => {
+    setProviderLoading('github');
+    setError("");
+    
+    try {
+      console.log('🔐 Iniciando login con GitHub...');
+      
+      const userData = await SecurityService.loginWithGitHub();
+      console.log('✅ Login con GitHub exitoso:', userData);
+      
+      navigate("/", { replace: true });
+      
+    } catch (error: any) {
+      console.error('❌ Error en login con GitHub:', error);
+      setError(error.message || "Error al autenticar con GitHub.");
+    } finally {
+      setProviderLoading(null);
+    }
+  };
+
+  const handleMicrosoftLogin = async () => {
+    setProviderLoading('microsoft');
+    setError("");
+    
+    try {
+      console.log('🔐 Iniciando login con Microsoft...');
+      
+      const userData = await SecurityService.loginWithMicrosoft();
+      console.log('✅ Login con Microsoft exitoso:', userData);
+      
+      navigate("/", { replace: true });
+      
+    } catch (error: any) {
+      console.error('❌ Error en login con Microsoft:', error);
+      setError(error.message || "Error al autenticar con Microsoft.");
+    } finally {
+      setProviderLoading(null);
     }
   };
 
   const handleGoogleError = () => {
     console.error('❌ Error en el flujo de Google OAuth');
     setError("Error al iniciar sesión con Google. Intenta de nuevo.");
-    setLoading(false);
+    setProviderLoading(null);
   };
 
-  // Client de google
   const GOOGLE_CLIENT_ID = "408294359663-pihvunt5ou1h5nkul77du76vvlsq66d1.apps.googleusercontent.com";
 
   return (
@@ -175,20 +213,74 @@ const SignIn: React.FC = () => {
             </Typography>
           </Divider>
 
-          <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
-              <GoogleLogin
-                onSuccess={handleGoogleLogin}
-                onError={handleGoogleError}
-                theme="filled_blue"
-                size="large"
-                text="signin_with"
-                shape="rectangular"
-                width="300"
-                locale="es"
-              />
-            </Box>
-          </GoogleOAuthProvider>
+          {/* Botones de proveedores OAuth */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 3 }}>
+            <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <GoogleLogin
+                  onSuccess={handleGoogleLogin}
+                  onError={handleGoogleError}
+                  theme="filled_blue"
+                  size="large"
+                  text="signin_with"
+                  shape="rectangular"
+                  width="300"
+                  locale="es"
+                />
+              </Box>
+            </GoogleOAuthProvider>
+
+            <Button
+              fullWidth
+              variant="outlined"
+              size="large"
+              onClick={handleGitHubLogin}
+              disabled={!!providerLoading}
+              startIcon={
+                providerLoading === 'github' ? 
+                <CircularProgress size={20} /> : 
+                <GitHub />
+              }
+              sx={{ 
+                height: '48px',
+                textTransform: 'none',
+                color: 'text.primary',
+                borderColor: 'grey.400',
+                '&:hover': {
+                  borderColor: 'grey.600',
+                  backgroundColor: 'grey.50'
+                }
+              }}
+            >
+              {providerLoading === 'github' ? 'Conectando con GitHub...' : 'Continuar con GitHub'}
+            </Button>
+
+            <Button
+              fullWidth
+              variant="outlined"
+              size="large"
+              onClick={handleMicrosoftLogin}
+              disabled={!!providerLoading}
+              startIcon={
+                providerLoading === 'microsoft' ? 
+                <CircularProgress size={20} /> : 
+                <Microsoft />
+              }
+              sx={{ 
+                height: '48px',
+                textTransform: 'none',
+                color: 'text.primary',
+                borderColor: 'grey.400',
+                '&:hover': {
+                  borderColor: 'grey.600',
+                  backgroundColor: 'grey.50'
+                }
+              }}
+            >
+              {providerLoading === 'microsoft' ? 'Conectando con Microsoft...' : 'Continuar con Microsoft'}
+            </Button>
+          </Box>
+
           <Box sx={{ mt: 3, textAlign: 'center' }}>
             <Typography variant="body2" color="textSecondary">
               ¿No tienes una cuenta?{' '}
@@ -196,7 +288,7 @@ const SignIn: React.FC = () => {
                 color="primary" 
                 onClick={() => navigate("/auth/signup")}
                 sx={{ textTransform: 'none' }}
-                disabled={loading}
+                disabled={loading || !!providerLoading}
               >
                 Regístrate aquí
               </Button>
