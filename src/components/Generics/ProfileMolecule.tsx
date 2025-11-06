@@ -4,7 +4,7 @@ import { Profile } from "../../models/Profile";
 interface ProfileMoleculeProps {
     profiles?: any[] | null;
     deleteProfile?: (values: Profile) => void;
-    updateProfile?: (values: Profile) => void;
+    updateProfile?: () => void;
 }
 
 const ProfileMolecule: React.FC<ProfileMoleculeProps> = ({
@@ -70,8 +70,7 @@ const ProfileMolecule: React.FC<ProfileMoleculeProps> = ({
                                         <div className="flex justify-end gap-4">
                                             <button
                                                 onClick={() =>
-                                                    updateProfile &&
-                                                    updateProfile(formattedProfile)
+                                                    updateProfile && updateProfile()
                                                 }
                                                 className="px-5 py-2.5 rounded-lg text-sm font-bold bg-indigo-700 hover:bg-indigo-800 text-yellow-200 border-2 border-indigo-900 shadow-lg hover:shadow-2xl transition-transform duration-200 transform hover:scale-105"
                                             >

@@ -56,7 +56,7 @@ const ListUsers: React.FC = () => {
     } else if (action === 'devices') {
       navigate(`/device/${item.id}`);
     } else if (action === 'profile') {
-      navigate(`/profile/${item.id}`);
+      navigate(`/profiles/list`);
     } else if (action === 'address') {
       navigate(`/addresses`);
     } else if (action === 'passwords') {

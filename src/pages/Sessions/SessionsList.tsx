@@ -1,5 +1,5 @@
 import { Session } from '../../models/Sessions';
-import { SessionService } from '../../services/sessionsService';
+import { sessionService } from '../../services/sessionsService';
 import GenericList from '../../components/Generics/GenericList';
 import { useEffect, useState } from 'react';
 
@@ -22,7 +22,7 @@ export default function SessionList() {
       }
 
       console.log('🔍 Cargando sesiones del usuario ID:', userId);
-      const response = await SessionService.getByUserId(userId);
+      const response = await sessionService.getByUserId(userId);
 
       console.log('✅ Sesiones cargadas:', response.data);
       setSessions(response.data);

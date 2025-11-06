@@ -1,7 +1,8 @@
 import { User } from "../models/User";
 import api from "../interceptors/axiosInterceptor";
+import axios from "axios";
 
-const API_URL = "/users"; 
+const API_URL = "/users";
 
 class UserService {
     async getUsers(): Promise<User[]> {
@@ -14,7 +15,26 @@ class UserService {
         }
     }
 
-    
+    /**
+ * 🔹 Iniciar sesión mediante OAuth (Google, Microsoft, GitHub)
+ */
+    async loginWithOAuth(provider: "google" | "microsoft" | "github", credential: string): Promise<User | null> {
+        try {
+            console.log("🔹 Llamando a:", `/auth/${provider}`);
+            const response = await api.post<User>(`/auth/${provider}`, { credential });
+            console.log("✅ Respuesta:", response.data);
+            return response.data;
+        } catch (error) {
+            console.error(`❌ Error al autenticar con ${provider}:`, error);
+            if (axios.isAxiosError(error) && error.response) {
+                console.error("📡 Backend respondió:", error.response.status, error.response.data);
+            }
+            return null;
+        }
+    }
+
+
+
     async getUserById(id: number): Promise<User | null> {
         try {
             const response = await api.get<User>(`${API_URL}/${id}`);
@@ -39,7 +59,7 @@ class UserService {
     }
 
     //Actualizar usuarioPermite actualizar su perfil, dirección u otros campos
-    
+
     async updateUser(id: number, user: Partial<User>): Promise<User | null> {
         try {
             const response = await api.put<User>(`${API_URL}/${id}`, user);

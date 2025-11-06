@@ -3,10 +3,12 @@ import { profileService } from "../../services/profileService";
 import ProfileMolecule from "../../components/Generics/ProfileMolecule";
 import { Profile } from "../../models/Profile";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const ListProfiles: React.FC = () => {
     const [profiles, setProfiles] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     // 🔹 Cargar los perfiles al montar el componente
     useEffect(() => {
@@ -42,13 +44,9 @@ const ListProfiles: React.FC = () => {
     }
 
     // 🔹 Actualizar perfil (pendiente de implementar)
-    const updateProfile = (profile: Profile) => {
-        Swal.fire({
-            title: "Editar perfil",
-            text: `Funcionalidad de actualización para ID: ${profile.id}`,
-            icon: "info",
-        });
-    };
+    const updateProfile = () => {
+        navigate('/profiles/update');
+    }
 
     // 🔹 Eliminar perfil y actualizar vista
     const deleteProfile = async (profile: Profile) => {

@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import ListUsers from '../pages/Users/List';
 import CreateUser from '../pages/Users/Create';
 import UpdateUser from '../pages/Users/Update';
+import UpdateProfile from '../pages/Profiles/Update';
 import ListPermissions from '../pages/Permission/List';
 import createProfiles from '../pages/Profiles/Create';
 import SecurityQuestionList from '../pages/SecurityQuestion/SecurityQuestionList';
@@ -47,6 +48,11 @@ const coreRoutes = [
     path: '/demo',
     title: 'Demo',
     component: Demo,
+  },
+  {
+    path: '/profiles/update',
+    title: 'Update Profile',
+    component: UpdateProfile,
   },
   {
     path: '/RolePermission/list',
