@@ -1,5 +1,5 @@
 import { Session } from '../../models/Sessions';
-import { sessionService } from '../../services/sessionsService';
+import { SessionService } from '../../services/sessionsService';
 import GenericForm, {
   FormField,
 } from '../../components/Generics/MUI/GenericForm';
@@ -21,7 +21,7 @@ const SessionForm: React.FC = () => {
         console.warn('⚠️ No se encontró userId en localStorage');
         return;
       }
-      await sessionService.create(userId, formData);
+      await SessionService.create(userId, formData);
       console.log('Session created successfully');
     } catch (error) {
       console.error('Error creating session:', error);
